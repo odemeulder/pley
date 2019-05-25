@@ -52,6 +52,7 @@ namespace Pley.Controllers.Tests {
     {
       //Given
       _svc.Setup(s => s.GetUser(It.IsAny<int>())).Returns(UserFixtures.ValidUser());
+      var ctrl = UserControllerFactory.Create(_svc.Object);
       //When
       var ok = _controller.GetUser(It.IsAny<int>());
       var a = (ok as OkObjectResult)?.Value;

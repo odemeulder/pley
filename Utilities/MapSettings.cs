@@ -9,6 +9,10 @@ namespace Pley {
       {
           CreateMap<User, UserDto>();
           CreateMap<UserDto, User>();
+          CreateMap<Restaurant, RestaurantDto>();
+          CreateMap<RestaurantDto, Restaurant>();
+          CreateMap<Review, ReviewDto>();
+          CreateMap<ReviewDto, Review>();
       }
   }
 }
