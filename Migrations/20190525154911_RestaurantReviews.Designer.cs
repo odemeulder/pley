@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Pley.Models;
@@ -9,9 +10,10 @@ using Pley.Models;
 namespace Pley.Migrations
 {
     [DbContext(typeof(PleyContext))]
-    partial class PleyContextModelSnapshot : ModelSnapshot
+    [Migration("20190525154911_RestaurantReviews")]
+    partial class RestaurantReviews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

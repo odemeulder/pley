@@ -14,4 +14,16 @@ namespace Pley
         {
         }
     }
+
+    public class PleyNotFoundException : PleyException {
+        public PleyNotFoundException() : base() {}
+
+        public PleyNotFoundException(string message) : base(message) { }
+
+        public PleyNotFoundException(string message, params object[] args) 
+            : base(String.Format(CultureInfo.CurrentCulture, message, args))
+        {
+        }
+
+    }
 }

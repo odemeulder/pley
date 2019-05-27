@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Pley.Controllers
 {
     [Route("api/[controller]")]
+
     public class SampleDataController : Controller
     {
         private static string[] Summaries = new[]
@@ -15,6 +17,7 @@ namespace Pley.Controllers
         };
 
         [HttpGet("[action]")]
+        [AllowAnonymous]
         public IEnumerable<WeatherForecast> WeatherForecasts(int startDateIndex)
         {
             var rng = new Random();

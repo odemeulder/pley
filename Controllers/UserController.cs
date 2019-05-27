@@ -26,7 +26,6 @@ namespace Pley.Controllers {
     private ILogger _logger;
     private readonly AppSettings _appSettings;
 
-
     public UserController(IUserService svc,
       IMapper mapper,
       ILogger<UserController> logger,
@@ -41,9 +40,9 @@ namespace Pley.Controllers {
     [HttpPost]
     [Route("auth")]
     [AllowAnonymous]
-    public IActionResult AuthenticateUser([FromBody]UserDto userDto) {
+    public IActionResult AuthenticateUser([FromBody]UserDto dto) {
       try {
-        var user = _svc.Authenticate(userDto.Email, userDto.Password);
+        var user = _svc.Authenticate(dto.Email, dto.Password);
         if (user == null) {
           return BadRequest(new { message = "Invalid username or password"});
         }
@@ -77,9 +76,7 @@ namespace Pley.Controllers {
     [HttpGet]
     public IActionResult GetUsers() {
       try {
-        //var users = _svc.GetAllUsers().Select(u => _mapper.Map<UserDto>(u));
         var users = _mapper.Map<IList<UserDto>>(_svc.GetAllUsers());
-
         return Ok(users);
       } catch (Exception ex) {
         return BadRequest(new { message = ex.Message });
@@ -101,10 +98,10 @@ namespace Pley.Controllers {
     }
 
     [HttpPut]
-    public IActionResult Update([FromBody]UserDto userDto) {
+    public IActionResult Update([FromBody]UserDto dto) {
       try {
-        var user = _mapper.Map<User>(userDto);
-        var rv = _svc.Update(user, userDto.Password);
+        var user = _mapper.Map<User>(dto);
+        var rv = _svc.Update(user, dto.Password);
         if (rv == null) {
           return NotFound();
         }
@@ -116,10 +113,10 @@ namespace Pley.Controllers {
 
     [HttpPost]
     [AllowAnonymous]
-    public IActionResult Register([FromBody]UserDto userDto) {
+    public IActionResult Register([FromBody]UserDto dto) {
       try {
-        var user = _mapper.Map<User>(userDto);
-        _svc.CreateUser(user, userDto.Password);
+        var user = _mapper.Map<User>(dto);
+        _svc.CreateUser(user, dto.Password);
         return Ok();
       } catch (Exception ex) {
         return BadRequest(new { message = ex.Message });

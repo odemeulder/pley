@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Collections.Generic;
 namespace Pley.Models {
   
   public class Restaurant : BaseEntity {
@@ -14,6 +14,6 @@ namespace Pley.Models {
     public string State { get; set; }
     public string Zip { get; set; }
     public string City { get; set; }
-
+    public IList<Review> Reviews { get; set; }
   }
 }

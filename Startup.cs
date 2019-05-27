@@ -54,6 +54,8 @@ namespace Pley
 
             // DI
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRestaurantService, RestaurantService>();
+            services.AddScoped<IReviewService, ReviewService>();
 
             // Authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
@@ -130,7 +132,7 @@ namespace Pley
 
                 if (env.IsDevelopment())
                 {
-//                    spa.UseReactDevelopmentServer(npmScript: "start");
+                   spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
             DbInitializer.Initialize(context);
