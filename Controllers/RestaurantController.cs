@@ -63,9 +63,8 @@ namespace Pley.Controllers {
     [HttpPost]
     public IActionResult Create([FromBody]RestaurantDto dto) {
       try {
-        var restaurant = _mapper.Map<Restaurant>(dto);
-        _svc.Create(restaurant);
-        return Ok();
+        var restaurant = _svc.Create(_mapper.Map<Restaurant>(dto));
+        return Ok(_mapper.Map<RestaurantDto>(restaurant));
       } catch (Exception ex) {
         return BadRequest(new { message= ex.Message});
       }
@@ -74,9 +73,8 @@ namespace Pley.Controllers {
     [HttpPut]
     public IActionResult Update([FromBody]RestaurantDto dto) {
       try {
-        var restaurant = _mapper.Map<Restaurant>(dto);
-        _svc.Update(restaurant);
-        return Ok();
+        var restaurant = _svc.Update(_mapper.Map<Restaurant>(dto));
+        return Ok(_mapper.Map<RestaurantDto>(restaurant));
       } catch (PleyNotFoundException) {
         return NotFound();
       } catch (Exception ex) {

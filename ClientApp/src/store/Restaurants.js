@@ -41,7 +41,7 @@ export const restaurantsReducer = (state = initialState, action) => {
       return {
         ...state,
         restaurantsLoading: false,
-        restaurants: [ ...action.restaurants, ...state.restaurants ]
+        restaurants: [ ...action.restaurants ]
       }
     case fetchAllRestaurantsFail:
       return initialState

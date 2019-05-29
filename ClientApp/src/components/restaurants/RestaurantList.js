@@ -1,22 +1,26 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { restaurantActions } from '../../store/Restaurants'
+import { Link } from 'react-router-dom'
 import RestaurantSummary from './RestaurantSummary'
 
 class RestaurantList extends React.Component {
   
-  componentDidMount() {
-    this.props.fetchAllRestaurants()
-  }
-
   render() {
+    const listStyle = {
+      listStyleType: 'none',
+      columns: 2
+    }
     return (
       <div>
         <h1>Restaurant List</h1>
+        <ul style={listStyle}>
         { this.props.restaurants.map(r => 
-            (<RestaurantSummary restaurant={r} owner={r.owner} key={r.id} />)
+            (<li key={r.id}>
+              <RestaurantSummary restaurant={r} owner={r.owner} />
+              <p><Link to={`/restaurant/${r.id}`}>Reviews</Link></p>
+            </li>)
         )}
+        </ul>
       </div>
     )
   }
@@ -27,6 +31,4 @@ const mapStateToProps = state => ({
   })
 
 export default connect(
-  mapStateToProps, 
-  dispatch =>  bindActionCreators(restaurantActions, dispatch)
-)(RestaurantList)
+  mapStateToProps)(RestaurantList)

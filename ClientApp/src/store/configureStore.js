@@ -6,6 +6,7 @@ import * as WeatherForecasts from './WeatherForecasts';
 import * as Users from './Users'
 import * as Alerts from './Alerts'
 import * as Restaurants from './Restaurants'
+import * as Reviews from './Reviews'
 
 export default function configureStore (history, initialState) {
   const reducers = {
@@ -14,7 +15,8 @@ export default function configureStore (history, initialState) {
     authentication: Users.authreducer,
     registration: Users.registrationReducer,
     alert: Alerts.alertReducer,
-    restaurants: Restaurants.restaurantsReducer
+    restaurants: Restaurants.restaurantsReducer,
+    reviews: Reviews.reviewsReducer
   }
 
   const middleware = [
@@ -34,9 +36,14 @@ export default function configureStore (history, initialState) {
     routing: routerReducer
   })
 
-  return createStore(
+  const store = createStore(
     rootReducer,
     initialState,
     compose(applyMiddleware(...middleware), ...enhancers)
   )
+
+  store.dispatch(Restaurants.restaurantActions.fetchAllRestaurants())
+  store.dispatch(Reviews.reviewActions.fetchAllReviews())
+
+  return store
 }

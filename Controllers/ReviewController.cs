@@ -73,8 +73,8 @@ namespace Pley.Controllers {
     [HttpPost]
     public IActionResult Create([FromBody]ReviewDto dto) {
       try {
-        _svc.Create(_mapper.Map<Review>(dto));
-        return Ok();
+        var review = _svc.Create(_mapper.Map<Review>(dto));
+        return Ok(_mapper.Map<ReviewDto>(review));
       } catch (PleyNotFoundException ex) {
         return NotFound(ex.Message);
       } catch (Exception ex) {
@@ -84,8 +84,8 @@ namespace Pley.Controllers {
     [HttpPut]
     public IActionResult Update([FromBody]ReviewDto dto) {
       try {
-        _svc.Update(_mapper.Map<Review>(dto));
-        return Ok();
+        var review = _svc.Update(_mapper.Map<Review>(dto));
+        return Ok(_mapper.Map<ReviewDto>(review));
       } catch (PleyNotFoundException ex) {
         return NotFound(ex.Message);
       } catch (Exception ex) {
@@ -97,8 +97,8 @@ namespace Pley.Controllers {
     [Route("{id}/reply")]
     public IActionResult Reply([FromBody]ReviewDto dto) {
       try {
-        _svc.Reply(dto.Id, dto.OwnerReply);
-        return Ok();
+        var review = _svc.Reply(dto.Id, dto.OwnerReply);
+        return Ok(_mapper.Map<ReviewDto>(review));
       } catch (PleyNotFoundException ex) {
         return NotFound(ex.Message);
       } catch (Exception ex) {
