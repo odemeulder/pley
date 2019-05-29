@@ -1,4 +1,11 @@
-﻿a.navbar-brand {
+﻿@import url('https://fonts.googleapis.com/css?family=Lemonada&display=swap');
+
+.text-logo {
+  font-family: Lemonada;
+  font-size: 200%;
+}
+
+a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;

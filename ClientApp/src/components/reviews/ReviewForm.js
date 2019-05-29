@@ -6,6 +6,7 @@ import TextArea from '../common/textArea'
 import StarRatingComponent from 'react-star-rating-component'
 import { reviewActions } from '../../store/Reviews'
 import history from '../../helpers/history'
+import PleyDatePicker from '../common/datePicker'
 
 class ReviewForm extends React.Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class ReviewForm extends React.Component {
         restaurant: {
           id: restaurantId
         },
+        visitDate: new Date(),
         reviewer: {
           id: props.reviewer.id
         }
@@ -30,6 +32,7 @@ class ReviewForm extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleStarChange = this.handleStarChange.bind(this)
+    this.handleDateChange = this.handleDateChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -53,6 +56,15 @@ class ReviewForm extends React.Component {
     })
   }
 
+  handleDateChange(e) {
+    console.log(new Date(e))
+    this.setState({
+      review: {
+        ...this.state.review,
+        visitDate: e
+      }
+    })
+  }
 
   handleSubmit(e) {
     e.preventDefault()
@@ -78,8 +90,16 @@ class ReviewForm extends React.Component {
           <TextArea
             name='customerReview'
             label='Your review'
-            placeHoder='In a few words, tell us how you liked it.'
+            placeholder='In a few words, tell us how you liked it.'
             onChange={this.handleChange}
+            error={this.state.errors.customerReview}
+          />
+          <PleyDatePicker
+            name='visitDate'
+            label='Date of visit'
+            value={this.state.review.visitDate}
+            onChange={this.handleDateChange}
+            error={this.state.errors.visitDate}
           />
           <input 
             type="submit" 
