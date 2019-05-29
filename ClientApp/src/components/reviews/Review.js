@@ -1,5 +1,6 @@
 import React from 'react'
 import StarRatingComponent from 'react-star-rating-component'
+import { Link } from 'react-router-dom'
 
 const formatDate = d => {
   var date = new Date(d)
@@ -26,7 +27,10 @@ class Review extends React.Component {
           {displayDate && <span><br />Visit date: {displayDate}</span>}
           {this.props.review.reviewer && (<i><br /> ({this.props.review.reviewer.firstName} {this.props.review.reviewer.lastName})</i>)}
         </p>
-        { this.props.review.ownerReply && <p><b>Owner reply:</b><i>{this.props.review.ownerReply}</i></p>}
+        { this.props.review.ownerReply ?
+         <p><b>Owner reply:</b><i>{this.props.review.ownerReply}</i></p> :
+         this.props.allowReply && <Link to={`/review-reply/${this.props.review.id}`}>Reply to review</Link>
+        }
       </div>
     )
   }

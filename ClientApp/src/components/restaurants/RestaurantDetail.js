@@ -22,9 +22,10 @@ class RestaurantDetail extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   const restaurantId = +ownProps.match.params.id
+  let reviews = state.reviews.reviews.filter(r => r.restaurantId === restaurantId)
   return {
     restaurant: state.restaurants.restaurants.filter(r => r.id === restaurantId)[0],
-    reviews: state.reviews.reviews.filter(r => r.restaurantId === restaurantId)
+    reviews
   }
 }
 

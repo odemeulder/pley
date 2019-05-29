@@ -47,7 +47,6 @@ class ReviewForm extends React.Component {
   }
 
   handleStarChange(e) {
-    console.log(e)
     this.setState({
       review: {
         ...this.state.review,
@@ -57,7 +56,6 @@ class ReviewForm extends React.Component {
   }
 
   handleDateChange(e) {
-    console.log(new Date(e))
     this.setState({
       review: {
         ...this.state.review,

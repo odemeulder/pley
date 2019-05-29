@@ -1,9 +1,9 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import TextInput from './common/textInput'
-import Alert from './common/Alert'
-import { actionCreators } from '../store/Users'
+import TextInput from '../common/textInput'
+import Alert from '../common/Alert'
+import { actionCreators } from '../../store/Users'
 
 class LoginForm extends React.Component {
   

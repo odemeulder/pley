@@ -1,9 +1,9 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Alert from './common/Alert'
-import TextInput from './common/textInput'
-import { actionCreators } from '../store/Users'
+import Alert from '../common/Alert'
+import TextInput from '../common/textInput'
+import { actionCreators } from '../../store/Users'
 
 class RegisterForm extends React.Component {
   
@@ -51,7 +51,6 @@ class RegisterForm extends React.Component {
 
   isValid() {
     let errors = {}
-    console.log(this.state)
     if (!this.state.user.firstName) {
       errors.firstName = 'First name required'
     }

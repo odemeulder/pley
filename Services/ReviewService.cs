@@ -82,6 +82,7 @@ namespace Pley.Services
       var review = _dbContext
         .Reviews
         .Include(r => r.Reviewer)
+        .Include(r => r.Restaurant)
         .FirstOrDefault(r => r.Id == id);
       if (review == null) throw new PleyNotFoundException("Review not found");
       review.ModifiedOn = DateTime.Now;

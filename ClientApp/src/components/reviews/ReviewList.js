@@ -12,12 +12,13 @@ class ReviewList extends React.Component {
       marginTop: '4px',
       padding: '3px'
     }
+    const allowReply = r => !r.ownerReply
     return (
       <ul style={listStyle}>
         {
           this.props.reviews.map(r => (
             <li key={r.id} style={listItemStyle}>
-              <Review review={r} />
+              <Review review={r} allowReply={allowReply(r)} />
             </li>
           ))
         }

@@ -21,14 +21,25 @@ class RestaurantList extends React.Component {
             </li>)
         )}
         </ul>
+        {this.props.children}
       </div>
     )
   }
 }
 
-const mapStateToProps = state => ({
-    restaurants: state.restaurants.restaurants
-  })
+const restaurantComparer = (r1, r2) => {
+  let n1 = r1.restaurantName.toLowerCase()
+  let n2 = r2.restaurantName.toLowerCase()
+  if (n1 < n2) return -1
+  if (n2 < n1) return 1
+  return 0
+}
 
-export default connect(
-  mapStateToProps)(RestaurantList)
+const mapStateToProps = state => {
+  let restaurants = state.restaurants.restaurants
+  restaurants = restaurants.sort(restaurantComparer)
+  return {
+    restaurants
+  }
+}
+export default connect(mapStateToProps)(RestaurantList)

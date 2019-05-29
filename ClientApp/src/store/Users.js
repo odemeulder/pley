@@ -14,20 +14,17 @@ const initialState = user ? { loggedIn: true, user } : {};
 export const actionCreators = {
   login(email, password) {
     return dispatch => {
-      console.log('actionCreator')
       const user = { email, password }
       dispatch({ type: authorizeUserRequest, user })
       dispatch(alertActions.clearAlerts())
       UserApi.login(email, password).then(
         user => {
           dispatch({ type: authorizeUserSuccess, user })
-          console.log("Successfull login")
           history.push('/')      
         },
         error => {
           dispatch({ type: authorizeUserFail, error })
           dispatch(alertActions.alertError(error))
-          console.log("failed login")          
         }
       )
     }
