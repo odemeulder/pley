@@ -7,13 +7,12 @@ class RestaurantList extends React.Component {
   
   render() {
     const listStyle = {
-      listStyleType: 'none',
       columns: 2
     }
     return (
       <div>
         <h1>Restaurant List</h1>
-        <ul style={listStyle}>
+        <ul className="list-unstyled" style={listStyle}>
         { this.props.restaurants.map(r => 
             (<li key={r.id}>
               <RestaurantSummary restaurant={r} owner={r.owner} />

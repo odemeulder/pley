@@ -77,7 +77,9 @@ export const userActions = {
 }
 
 let user = JSON.parse(localStorage.getItem('user'));
-const initialState = user ? { loggedIn: true, currentUser: user } : {};
+const initialState = user 
+  ? { loggedIn: true, currentUser: user, users: [] } 
+  : { loggedIn: false, currentUser: {}, users: [] };
 
 export const userReducer = (state = initialState, action) => {
   switch(action.type) {

@@ -12,6 +12,8 @@ import RestaurantTable from './components/restaurants/RestaurantTable'
 import RestaurantForm from './components/restaurants/RestaurantForm'
 import ReviewForm from './components/reviews/ReviewForm'
 import ReplyForm from './components/reviews/ReplyForm'
+import UserTable from './components/users/UserTable'
+import UserForm from './components/users/UserForm'
 
 export default () => (
   <Layout>
@@ -26,5 +28,7 @@ export default () => (
     <Route path='/restaurants' component={RestaurantList} />
     <Route path='/restaurant-admin' component={RestaurantTable} />
     <Route path='/restaurant-form/:id' component={RestaurantForm} />
+    <Route path='/user-admin' component={UserTable} />
+    <Route path='/user-form/:id' component={UserForm} />
   </Layout>
 )

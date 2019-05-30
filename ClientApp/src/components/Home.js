@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import './common/theme.css'
 
 const Home = props => (
   <div>

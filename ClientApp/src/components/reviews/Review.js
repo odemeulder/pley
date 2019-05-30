@@ -22,13 +22,19 @@ class Review extends React.Component {
             starCount={5} 
             editing={false} 
         />
-        <p>
-          {this.props.review.customerReview}
-          {displayDate && <span><br />Visit date: {displayDate}</span>}
-          {this.props.review.reviewer && (<i><br /> ({this.props.review.reviewer.firstName} {this.props.review.reviewer.lastName})</i>)}
-        </p>
+        <blockquote className="blockquote">
+          <p className="mb-0">{this.props.review.customerReview}</p>
+          <footer className="blockquote-footer">
+            <cite title="Customer Review">
+              {this.props.review.reviewer.firstName} {this.props.review.reviewer.lastName}
+              {displayDate && <span> (Visit date: {displayDate})</span>}
+            </cite>
+          </footer>
+        </blockquote>
         { this.props.review.ownerReply ?
-         <p><b>Owner reply:</b><i>{this.props.review.ownerReply}</i></p> :
+          <blockquote className="blockquote">
+            <p><b>Owner reply: </b><i>{this.props.review.ownerReply}</i></p>
+          </blockquote> :
          this.props.allowReply && <Link to={`/review-reply/${this.props.review.id}`}>Reply to review</Link>
         }
       </div>
