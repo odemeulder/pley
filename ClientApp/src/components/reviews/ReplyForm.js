@@ -5,7 +5,6 @@ import RestaurantSummary from '../restaurants/RestaurantSummary'
 import Review from './Review'
 import TextArea from '../common/textArea'
 import { reviewActions } from '../../store/Reviews'
-import history from '../../helpers/history'
 import Alert from '../common/Alert'
 
 class ReplyForm extends React.Component {
@@ -83,7 +82,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     restaurant,
     review,
-    owner: state.authentication.user,
+    owner: state.users.currentUser,
   }
 }
 

@@ -1,12 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import RestaurantSummary from '../restaurants/RestaurantSummary'
 import TextInput from '../common/textInput'
-import StarRatingComponent from 'react-star-rating-component'
 import { restaurantActions } from '../../store/Restaurants'
-import history from '../../helpers/history'
-import PleyDatePicker from '../common/datePicker'
 import Alert from '../common/Alert'
 
 class RestaurantForm extends React.Component {
@@ -23,7 +19,7 @@ class RestaurantForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.restaurant.id != nextProps.restaurant.id) {
+    if (this.props.restaurant.id !== nextProps.restaurant.id) {
         this.setState({restaurant: Object.assign({}, nextProps.restaurant)})
     }
   }
@@ -124,11 +120,11 @@ const mapStateToProps = (state, ownProps) => {
     city: '',
     state: '',
     zip: '',
-    owner: state.authentication.user
+    owner: state.users.currentUser
   }
   return { 
     restaurant: state.restaurants.restaurants.find(r => r.id === restaurantId) || emptyRestaurant, 
-    owner: state.authentication.user
+    owner: state.users.currentUser
   }
 }
 

@@ -114,7 +114,7 @@ const mapStateToProps = (state, ownProps) => {
   const restaurantId = +ownProps.match.params.id
   return {
     restaurant: state.restaurants.restaurants.filter(r => r.id === restaurantId)[0],
-    reviewer: state.authentication.user
+    reviewer: state.users.currentUser
   }
 }
 

@@ -8,10 +8,12 @@ const authorizeUserFail = 'USER_AUTH_FAIL'
 const registerUserRequest = 'REGISTER_REQUEST'
 const registerUserSuccess = 'REGISTER_SUCCESS'
 const registerUserFail = 'REGISTER_FAIL'
-let user = JSON.parse(localStorage.getItem('user'));
-const initialState = user ? { loggedIn: true, user } : {};
+const userUpdateSuccess = 'USER_UPDATE_SUCCES'
+const fetchUsersSuccess = 'FETCH_USERS_SUCCESS'
 
-export const actionCreators = {
+
+export const userActions = {
+  authorizeUser: user => ({ type: authorizeUserSuccess, user }),
   login(email, password) {
     return dispatch => {
       const user = { email, password }
@@ -44,10 +46,40 @@ export const actionCreators = {
         }
       )
     }
+  },
+  updateUser(user) {
+    return dispatch => {
+      dispatch(alertActions.clearAlerts())
+      UserApi.updateUser(user).then(
+        user => {
+          dispatch({ type: userUpdateSuccess, user})
+          history.push('/users-admin')
+        },
+        error => {
+          dispatch(alertActions.alertError(error))
+        }
+      )
+    }
+  },
+  fetchAllUsers() {
+    return dispatch => {
+      dispatch(alertActions.clearAlerts())
+      UserApi.getAll().then(
+        users => {
+          dispatch({ type: fetchUsersSuccess, users})
+        },
+        error => {
+          dispatch(alertActions.alertError(error))
+        }
+      )
+    }
   }
 }
 
-export const registrationReducer = (state = { registering: false }, action) => {
+let user = JSON.parse(localStorage.getItem('user'));
+const initialState = user ? { loggedIn: true, currentUser: user } : {};
+
+export const userReducer = (state = initialState, action) => {
   switch(action.type) {
     case registerUserRequest:
       return {
@@ -56,26 +88,31 @@ export const registrationReducer = (state = { registering: false }, action) => {
     case registerUserSuccess:
     case registerUserFail: 
       return state
-    default:
-      return state
-  }
-}
-
-export const authreducer = (state = initialState, action) => {
-  switch(action.type) {
+    case fetchUsersSuccess:
+      return {
+        ...state,
+        users: action.users
+      }
+    case userUpdateSuccess:
+      return {
+        ...state,
+        users: state.users.map(u => {
+          return u.id === action.user.id ? { ...u, ...action.user} : u
+        })
+      }
     case authorizeUserRequest:
       return {
         loggedIn: true,
-        user: action.user
+        currentUser: action.user
       }
     case authorizeUserSuccess:
       return {
         loggedIn: true,
-        user: action.user
+        currentUser: action.user
       }
     case authorizeUserFail: 
       return {
-        user: {}
+        currentUser: {}
       }
     default:
       return state

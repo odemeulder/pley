@@ -58,18 +58,15 @@ const restaurantComparer = (r1, r2) => {
 }
 
 const mapStateToProps = state => {
-  let user = state.authentication.user
+  let user = state.users.currentUser
   let restaurants = state.restaurants.restaurants.filter(r => r.owner.id === user.id)
   restaurants = restaurants.sort(restaurantComparer)
-  const reviews = state.reviews.reviews.filter(r => r.restaurantId)
-  // state.reviews.reviews.filter(review => review.restaurantId === restaurant.id
   restaurants = restaurants.map(restaurant => 
     ({ ...restaurant, 
       unReplied: state.reviews.reviews.filter(review => 
         review.restaurantId === restaurant.id && !review.ownerReply
         ).length
     }))
-  console.log({restaurants})
   return {
     restaurants,
     user

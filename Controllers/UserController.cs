@@ -98,6 +98,7 @@ namespace Pley.Controllers {
     }
 
     [HttpPut]
+    [Route("{id?}")]
     public IActionResult Update([FromBody]UserDto dto) {
       try {
         var user = _mapper.Map<User>(dto);

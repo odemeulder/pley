@@ -1,24 +1,44 @@
+import { GetAuthToken } from './TokenHeader'
+import { ResponseHandler } from './ResponseHandler'
+
 export const UserApi = {
-    login,
-    logout,
-    register
+  login,
+  logout,
+  register,
+  getAll
+}
+
+function getAll() {
+  const options = {
+    method: 'GET',
+    headers: { ...GetAuthToken(), 'Content-Type': 'application/json' },
+  }
+  return fetch(`api/users`, options).then(ResponseHandler)
+}
+
+function updateUser(user) {
+  const options = {
+    method: 'PUT',
+    headers: { ...GetAuthToken(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(user)
+  }
+  return fetch(`api/users/${user.id}`, options).then(ResponseHandler)
 }
 
 function login(email, password) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-    }
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  }
 
-    return fetch(`api/users/auth`, requestOptions)
-        .then(handleResponse)
-        .then(user => {
-            // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('user', JSON.stringify(user))
-
-            return user
-            })
+  return fetch(`api/users/auth`, requestOptions)
+    .then(ResponseHandler)
+    .then(user => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+      localStorage.setItem('user', JSON.stringify(user))
+      return user
+    })
 }
 
 function logout() {
@@ -28,27 +48,9 @@ function logout() {
 function register(user) {
   const requestOptions = {
     method: "POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(user)
   }
-  return fetch(`api/users`, requestOptions).then(handleResponse)
+  return fetch(`api/users`, requestOptions).then(ResponseHandler)
 }
 
-function handleResponse(response) {
-  return response.text().then(text => {
-      const data = text && JSON.parse(text);
-      if (!response.ok) {
-          if (response.status === 401) {
-              // auto logout if 401 response returned from api
-              logout();
-          }
-
-          const error = (data && data.message) || response.statusText;
-          return Promise.reject(error);
-      }
-
-      return data;
-  });
-}

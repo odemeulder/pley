@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import TextInput from '../common/textInput'
 import Alert from '../common/Alert'
-import { actionCreators } from '../../store/Users'
+import { userActions } from '../../store/Users'
 
 class LoginForm extends React.Component {
   
@@ -61,13 +61,10 @@ class LoginForm extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { loggingIn } = state.authentication;
-  return {
-      loggingIn
-  };
+  return {}
 }
 
 export default connect(
   mapStateToProps, 
-  dispatch => bindActionCreators(actionCreators, dispatch)
+  dispatch => bindActionCreators(userActions, dispatch)
 )(LoginForm)

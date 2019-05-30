@@ -12,8 +12,7 @@ export default function configureStore (history, initialState) {
   const reducers = {
     counter: Counter.reducer,
     weatherForecasts: WeatherForecasts.reducer,
-    authentication: Users.authreducer,
-    registration: Users.registrationReducer,
+    users: Users.userReducer,
     alert: Alerts.alertReducer,
     restaurants: Restaurants.restaurantsReducer,
     reviews: Reviews.reviewsReducer
@@ -44,6 +43,9 @@ export default function configureStore (history, initialState) {
 
   store.dispatch(Restaurants.restaurantActions.fetchAllRestaurants())
   store.dispatch(Reviews.reviewActions.fetchAllReviews())
+  store.dispatch(Users.userActions.fetchAllUsers())
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user) store.dispatch(Users.userActions.authorizeUser(user))
 
   return store
 }

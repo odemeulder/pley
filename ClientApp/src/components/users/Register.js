@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Alert from '../common/Alert'
 import TextInput from '../common/textInput'
-import { actionCreators } from '../../store/Users'
+import { userActions } from '../../store/Users'
 
 class RegisterForm extends React.Component {
   
@@ -132,5 +132,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps, 
-  dispatch => bindActionCreators(actionCreators, dispatch)
+  dispatch => bindActionCreators(userActions, dispatch)
 )(RegisterForm)
