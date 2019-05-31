@@ -88,7 +88,7 @@ namespace Pley.Services {
     {
       var existingUser = _dbContext.Users.Find(user.Id);
       if (existingUser == null) {
-        return null;
+        throw new PleyNotFoundException("User not found");
       }
       if (user.Email != existingUser.Email) {
         if (_dbContext.Users.Any(u => u.Email == user.Email)) {

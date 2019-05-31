@@ -43,7 +43,7 @@ namespace Pley.Controllers {
         }
         return Ok(_mapper.Map<IList<RestaurantDto>>(restaurants));
       } catch (Exception ex) {
-        return BadRequest(new { message= ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
@@ -54,9 +54,9 @@ namespace Pley.Controllers {
         var restaurant = _svc.Get(id);
         return Ok(_mapper.Map<RestaurantDto>(restaurant));
       } catch (PleyNotFoundException) {
-        return NotFound();
+        return NotFound(new ErrorResponse("Restaurant not found."));
       } catch (Exception ex) {
-        return BadRequest(new { message= ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
@@ -66,7 +66,7 @@ namespace Pley.Controllers {
         var restaurant = _svc.Create(_mapper.Map<Restaurant>(dto));
         return Ok(_mapper.Map<RestaurantDto>(restaurant));
       } catch (Exception ex) {
-        return BadRequest(new { message= ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
@@ -76,9 +76,9 @@ namespace Pley.Controllers {
         var restaurant = _svc.Update(_mapper.Map<Restaurant>(dto));
         return Ok(_mapper.Map<RestaurantDto>(restaurant));
       } catch (PleyNotFoundException) {
-        return NotFound();
+        return NotFound(new ErrorResponse("Restaurant not found."));
       } catch (Exception ex) {
-        return BadRequest(new { message= ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
@@ -90,9 +90,9 @@ namespace Pley.Controllers {
         _svc.Delete(id);
         return Ok();
       } catch (PleyNotFoundException) {
-        return NotFound();
+        return NotFound(new ErrorResponse("Cannot delete. Restaurant not found."));
       } catch (Exception ex) {
-        return BadRequest(new { message= ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
   }

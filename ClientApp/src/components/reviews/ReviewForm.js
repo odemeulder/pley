@@ -102,7 +102,7 @@ class ReviewForm extends React.Component {
           <input 
             type="submit" 
             value="Submit Review" 
-            className="btn btn-primary"
+            className="btn btn-success"
           />
         </form>
       </div>

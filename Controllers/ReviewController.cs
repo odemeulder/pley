@@ -41,7 +41,7 @@ namespace Pley.Controllers {
         var reviews = _mapper.Map<IList<ReviewDto>>(_svc.GetAll());
         return Ok(reviews);
       } catch (Exception ex) {
-        return BadRequest(new { Message = ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
@@ -51,9 +51,9 @@ namespace Pley.Controllers {
       try {
         return Ok(_mapper.Map<ReviewDto>(_svc.Get(id)));
       } catch (PleyNotFoundException ex) {
-        return NotFound(ex.Message);
+        return NotFound(new ErrorResponse(ex.Message));
       } catch (Exception ex) {
-        return BadRequest(new { Message = ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
@@ -64,9 +64,9 @@ namespace Pley.Controllers {
         _svc.Delete(id);
         return Ok();
       } catch (PleyNotFoundException ex) {
-        return NotFound(ex.Message);
+        return NotFound(new ErrorResponse(ex.Message));
       } catch (Exception ex) {
-        return BadRequest(new { Message = ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
@@ -76,9 +76,9 @@ namespace Pley.Controllers {
         var review = _svc.Create(_mapper.Map<Review>(dto));
         return Ok(_mapper.Map<ReviewDto>(review));
       } catch (PleyNotFoundException ex) {
-        return NotFound(ex.Message);
+        return NotFound(new ErrorResponse(ex.Message));
       } catch (Exception ex) {
-        return BadRequest(new { Message = ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
     [HttpPut]
@@ -87,9 +87,9 @@ namespace Pley.Controllers {
         var review = _svc.Update(_mapper.Map<Review>(dto));
         return Ok(_mapper.Map<ReviewDto>(review));
       } catch (PleyNotFoundException ex) {
-        return NotFound(ex.Message);
+        return NotFound(new ErrorResponse(ex.Message));
       } catch (Exception ex) {
-        return BadRequest(new { Message = ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
@@ -100,9 +100,9 @@ namespace Pley.Controllers {
         var review = _svc.Reply(dto.Id, dto.OwnerReply);
         return Ok(_mapper.Map<ReviewDto>(review));
       } catch (PleyNotFoundException ex) {
-        return NotFound(ex.Message);
+        return NotFound(new ErrorResponse(ex.Message));
       } catch (Exception ex) {
-        return BadRequest(new { Message = ex.Message});
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
   }

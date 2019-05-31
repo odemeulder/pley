@@ -44,6 +44,11 @@ class RestaurantTable extends React.Component {
             ))}
           </tbody>
         </Table>
+        <Link to="/restaurant-form"><input
+          type="button"
+          value="Create New Restaurant"
+          className="btn btn-info"
+        /></Link>
       </div>
     )
   }

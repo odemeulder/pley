@@ -45,7 +45,10 @@ namespace Pley.Services
 
     public void Delete(int id)
     {
-      var restaurant = _dbContext.Restaurants.Find(id);
+      var restaurant = _dbContext
+        .Restaurants
+        .Include(r => r.Reviews) // including review for cascading delete
+        .FirstOrDefault(r => r.Id == id);
       if (restaurant == null) throw new PleyNotFoundException("Restaurant not found");
       _dbContext.Restaurants.Remove(restaurant);
       _dbContext.SaveChanges();

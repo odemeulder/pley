@@ -67,7 +67,7 @@ class ReplyForm extends React.Component {
           <input 
             type="submit" 
             value="Submit Reply" 
-            className="btn btn-primary"
+            className="btn btn-success"
           />
         </form>
       </div>

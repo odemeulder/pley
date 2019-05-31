@@ -8,6 +8,7 @@ const fetchAllRestaurantsFail = "FETCH_ALL_RESTAURANTS_FAIL"
 
 const createRestaurantSuccess = "CREATE_RESTAURANT_SUCCESS"
 const updateRestaurantSuccess = "UPDATE_RESTAURANT_SUCCESS"
+const deleteRestaurantSuccess = "DELETE_RESTAURANT_SUCCESS"
 
 // action creators
 export const restaurantActions = {
@@ -44,6 +45,19 @@ export const restaurantActions = {
       RestaurantsApi.update(restaurant).then(
         data => {
           dispatch({ type: updateRestaurantSuccess, restaurant: data })
+          history.push(`/restaurant-admin`)
+        },
+        error => {
+          dispatch(alertActions.alertError(error))
+        }
+      )
+    }
+  },
+  deleteRestaurant(id) {
+    return dispatch => {
+      RestaurantsApi.delete(id).then(
+        () => {
+          dispatch({ type: deleteRestaurantSuccess, id })
           history.push(`/restaurant-admin`)
         },
         error => {
@@ -91,6 +105,12 @@ export const restaurantsReducer = (state = initialState, action) => {
         ...state,
         restaurantsLoading: false,
         restaurants
+      }
+    case deleteRestaurantSuccess:
+      return {
+        ...state,
+        restaurantsLoading: false,
+        restaurants: state.restaurants.filter(r => r.id !== action.id)
       }
     default: 
       return state

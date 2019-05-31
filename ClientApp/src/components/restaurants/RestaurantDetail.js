@@ -12,9 +12,9 @@ class RestaurantDetail extends React.Component {
       <div>
         <h1>Restaurant View</h1>
         <RestaurantSummary restaurant={this.props.restaurant} />
-        <Link to={`/leave-review/${this.props.restaurant.id}`}>Leave Review</Link>
+        <Link className="btn btn-info btn-sm" to={`/leave-review/${this.props.restaurant.id}`}>Leave Review</Link>
         <ReviewList reviews={this.props.reviews} />
-        <Link to="/restaurants">Back to list</Link>
+        <Link className="btn btn-info btn-sm" to="/restaurants">Back to list</Link>
       </div>
     )
   }

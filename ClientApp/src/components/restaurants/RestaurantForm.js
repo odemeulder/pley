@@ -16,6 +16,7 @@ class RestaurantForm extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -43,6 +44,12 @@ class RestaurantForm extends React.Component {
     }
   }
 
+  handleDelete(e) {
+    e.preventDefault()
+    let r = window.confirm('Are you sure you want to delete this?')
+    r && this.props.deleteRestaurant(this.state.restaurant.id)
+  }
+
   isValid() {
     let errors = {}
     if (!this.state.restaurant.restaurantName) {
@@ -56,6 +63,7 @@ class RestaurantForm extends React.Component {
   }
 
   render() {
+    console.log('restaurant form')
     return (
       <div>
         <Alert />
@@ -104,7 +112,15 @@ class RestaurantForm extends React.Component {
           <input 
             type="submit" 
             value="Save Restaurant" 
-            className="btn btn-primary"
+            className="btn btn-success"
+          />
+          <br />
+          <br />
+          <input 
+            type="button"
+            value="Delete Restaurant"
+            className="btn btn-danger"
+            onClick={this.handleDelete}
           />
         </form>
       </div>

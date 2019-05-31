@@ -24,5 +24,12 @@ export const RestaurantsApi = {
       body: JSON.stringify(restaurant)
     }
     return fetch(`api/restaurants`, options).then(ResponseHandler)
+  },
+  delete: (id) => {
+    const options = {
+      method: 'DELETE',
+      headers: GetAuthToken()
+    }
+    return fetch(`api/restaurants/${id}`, options).then(ResponseHandler)
   }
 }

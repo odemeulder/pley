@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap'
+import { UserType } from '../../helpers/userTypes'
 
 class UserTable extends React.Component {
     render() {
@@ -24,7 +25,7 @@ class UserTable extends React.Component {
                 <th>{u.id}</th>
                 <td><Link to={`/user-form/${u.id}`}>{u.firstName} {u.lastName}</Link></td>
                 <td>{u.email}</td>
-                <td>{u.type}</td>
+                <td>{UserType.Display(u.type)}</td>
               </tr>
             ))}
           </tbody>

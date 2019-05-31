@@ -10,7 +10,7 @@ const registerUserSuccess = 'REGISTER_SUCCESS'
 const registerUserFail = 'REGISTER_FAIL'
 const userUpdateSuccess = 'USER_UPDATE_SUCCES'
 const fetchUsersSuccess = 'FETCH_USERS_SUCCESS'
-
+const deleteUserSuccess = 'DELETE_USER_SUCCESS'
 
 export const userActions = {
   authorizeUser: user => ({ type: authorizeUserSuccess, user }),
@@ -53,7 +53,20 @@ export const userActions = {
       UserApi.updateUser(user).then(
         user => {
           dispatch({ type: userUpdateSuccess, user})
-          history.push('/users-admin')
+          history.push('/user-admin')
+        },
+        error => {
+          dispatch(alertActions.alertError(error))
+        }
+      )
+    }
+  },
+  deleteUser(id) {
+    return dispatch => {
+      dispatch(alertActions.clearAlerts())
+      UserApi.deleteUser(id).then(
+        () => {
+          dispatch({ type: deleteUserSuccess, id})
         },
         error => {
           dispatch(alertActions.alertError(error))
@@ -101,6 +114,11 @@ export const userReducer = (state = initialState, action) => {
         users: state.users.map(u => {
           return u.id === action.user.id ? { ...u, ...action.user} : u
         })
+      }
+    case deleteUserSuccess:
+      return {
+        ...state,
+        users: state.users.filter(u => u.id !== action.id)
       }
     case authorizeUserRequest:
       return {

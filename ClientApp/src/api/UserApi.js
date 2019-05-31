@@ -5,7 +5,9 @@ export const UserApi = {
   login,
   logout,
   register,
-  getAll
+  getAll,
+  updateUser,
+  deleteUser
 }
 
 function getAll() {
@@ -23,6 +25,14 @@ function updateUser(user) {
     body: JSON.stringify(user)
   }
   return fetch(`api/users/${user.id}`, options).then(ResponseHandler)
+}
+
+function deleteUser(id) {
+  const options = {
+    method: 'DELETE',
+    headers: { ...GetAuthToken(), 'Content-Type': 'application/json' }
+  }
+  return fetch(`api/users/${id}`, options).then(ResponseHandler)
 }
 
 function login(email, password) {

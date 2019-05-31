@@ -66,10 +66,11 @@ namespace Pley.Controllers {
             Email = user.Email,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Token = tokenString
+            Token = tokenString,
+            Type = user.Type
         });
       } catch (Exception ex) {
-        return BadRequest(new { message = ex.Message });
+        return BadRequest(new ErrorResponse(ex.Message));
       }      
     }
 
@@ -79,7 +80,7 @@ namespace Pley.Controllers {
         var users = _mapper.Map<IList<UserDto>>(_svc.GetAllUsers());
         return Ok(users);
       } catch (Exception ex) {
-        return BadRequest(new { message = ex.Message });
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
@@ -89,11 +90,11 @@ namespace Pley.Controllers {
       try {
         var user = _mapper.Map<UserDto>(_svc.GetUser(id));
         if (user == null) {
-          return NotFound();
+          return NotFound(new ErrorResponse("User not found"));
         }
         return Ok(user);
       } catch (Exception ex) {
-        return BadRequest(new { message = ex.Message });
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
@@ -103,14 +104,27 @@ namespace Pley.Controllers {
       try {
         var user = _mapper.Map<User>(dto);
         var rv = _svc.Update(user, dto.Password);
-        if (rv == null) {
-          return NotFound();
-        }
-        return Ok();
+        return Ok(_mapper.Map<UserDto>(user));
+      } catch(PleyException ex) {
+        return NotFound(new ErrorResponse(ex.Message));
       } catch (Exception ex) {
-        return BadRequest(new { message = ex.Message });
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
+
+    [HttpDelete]
+    [Route("{id?}")]
+    public IActionResult Delete([FromRoute] int id) {
+      try {
+        _svc.Delete(id);
+        return Ok();
+      } catch(PleyException ex) {
+        return NotFound(new ErrorResponse(ex.Message));
+      } catch (Exception ex) {
+        return BadRequest(new ErrorResponse(ex.Message));
+      }
+    }
+
 
     [HttpPost]
     [AllowAnonymous]
@@ -118,9 +132,9 @@ namespace Pley.Controllers {
       try {
         var user = _mapper.Map<User>(dto);
         _svc.CreateUser(user, dto.Password);
-        return Ok();
+        return Ok(_mapper.Map<UserDto>(user));
       } catch (Exception ex) {
-        return BadRequest(new { message = ex.Message });
+        return BadRequest(new ErrorResponse(ex.Message));
       }
     }
   }

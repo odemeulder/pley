@@ -2,8 +2,6 @@ import React from 'react'
 import { Route } from 'react-router'
 import Layout from './components/Layout'
 import Home from './components/Home'
-import Counter from './components/Counter'
-import FetchData from './components/FetchData'
 import LoginForm from './components/users/Login'
 import RegisterForm from './components/users/Register'
 import RestaurantList from './components/restaurants/RestaurantList'
@@ -14,21 +12,21 @@ import ReviewForm from './components/reviews/ReviewForm'
 import ReplyForm from './components/reviews/ReplyForm'
 import UserTable from './components/users/UserTable'
 import UserForm from './components/users/UserForm'
+import { UserType } from './helpers/userTypes'
+import Authorize from './helpers/Authorize'
 
 export default () => (
   <Layout>
     <Route exact path='/' component={Home} />
-    <Route path='/counter' component={Counter} />
-    <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
     <Route path='/login' component={LoginForm} />
     <Route path='/register' component={RegisterForm} />
     <Route path='/leave-review/:id' component={ReviewForm} />
     <Route path='/review-reply/:reviewId' component={ReplyForm} />
     <Route path='/restaurant/:id?' component={RestaurantDetail} />
     <Route path='/restaurants' component={RestaurantList} />
-    <Route path='/restaurant-admin' component={RestaurantTable} />
-    <Route path='/restaurant-form/:id' component={RestaurantForm} />
-    <Route path='/user-admin' component={UserTable} />
-    <Route path='/user-form/:id' component={UserForm} />
+    <Route path='/restaurant-admin' component={Authorize(RestaurantTable, [ UserType.Owner, UserType.Admin ])} />
+    <Route path='/restaurant-form/:id?' component={Authorize(RestaurantForm, [ UserType.Admin, UserType.Owner ])} />
+    <Route path='/user-admin' component={Authorize(UserTable, [ UserType.Admin ]) } />
+    <Route path='/user-form/:id' component={Authorize(UserForm, [ UserType.Admin ])} />
   </Layout>
 )
