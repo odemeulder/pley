@@ -3,9 +3,9 @@ using Pley.Models;
 using Pley.Dtos;
 
 namespace Pley {
-  public class UserProfile : Profile
+  public class PleyProfile : Profile
   {
-      public UserProfile()
+      public PleyProfile()
       {
           CreateMap<User, UserDto>();
           CreateMap<UserDto, User>();

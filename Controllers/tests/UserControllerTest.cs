@@ -7,6 +7,7 @@ using AutoMapper;
 using Pley.Models;
 using Pley.Services;
 using Pley.Dtos;
+using Pley;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -28,11 +29,13 @@ namespace Pley.Controllers.Tests {
     public void ReturnAllUsers()
     {
       //Given
-      _svc.Setup(s => s.GetAllUsers()).Returns(UserFixtures.GetUsers());
+      var svc = new Mock<IUserService>();
+      svc.Setup(s => s.GetAllUsers()).Returns(UserFixtures.GetUsers());
+      var controller = UserControllerFactory.Create(svc.Object);
+
       //When
-      var okResult = _controller.GetUsers();
-      var a = okResult as OkObjectResult;
-      var b = a.Value;
+      var okResult = controller.GetUsers();
+
       //Then
       Assert.IsType<OkObjectResult>(okResult);
     }
@@ -54,11 +57,11 @@ namespace Pley.Controllers.Tests {
       _svc.Setup(s => s.GetUser(It.IsAny<int>())).Returns(UserFixtures.ValidUser());
       var ctrl = UserControllerFactory.Create(_svc.Object);
       //When
-      var ok = _controller.GetUser(2);
+      var ok = ctrl.GetUser(99);
       var a = (ok as OkObjectResult)?.Value;
 
       //Then
-      Assert.IsType<OkResult>(ok);
+      Assert.IsType<OkObjectResult>(ok);
       Assert.IsType<UserDto>(a);
     }
     [Fact]
@@ -69,7 +72,7 @@ namespace Pley.Controllers.Tests {
       //When
       var resp = _controller.GetUser(It.IsAny<int>());
       //Then
-      Assert.IsType<NotFoundResult>(resp);
+      Assert.IsType<NotFoundObjectResult>(resp);
     }
   }
 
@@ -92,18 +95,18 @@ namespace Pley.Controllers.Tests {
       //When
       var rv = _controller.Update(UserFixtures.DtoUser());
       //Then
-      Assert.IsType<OkResult>(rv);
+      Assert.IsType<OkObjectResult>(rv);
     }
     [Fact]
     public void ReturnNotFound()
     {
       //Given
       _svc.Setup(s => s.Update(It.IsAny<User>(), It.IsAny<string>()))
-        .Returns(default(User));
+        .Throws(new PleyNotFoundException(It.IsAny<string>()));
       //When
       var rv = _controller.Update(UserFixtures.DtoUser());
       //Then
-      Assert.IsType<NotFoundResult>(rv);
+      Assert.IsType<NotFoundObjectResult>(rv);
     }
   }
 
@@ -111,8 +114,11 @@ namespace Pley.Controllers.Tests {
     public static UserController Create(IUserService svc) {
       var logger = new Mock<ILogger<UserController>>();
       var appSettings = new Mock<IOptions<AppSettings>>();
-      var mapper = new Mock<IMapper>();
-      return new UserController(svc, mapper.Object, logger.Object, appSettings.Object);
+      var config = new MapperConfiguration(cfg => {
+          cfg.AddProfile<PleyProfile>();
+      });
+      IMapper mapper = new Mapper(config);
+      return new UserController(svc, mapper, logger.Object, appSettings.Object);
     }
   }
 
@@ -147,8 +153,15 @@ namespace Pley.Controllers.Tests {
       LastName = "Apple", 
       Email = "a@a.com"
     };
+    private static UserDto dtoUser2 = new UserDto { 
+      Id = 2,
+      FirstName = "Bob", 
+      LastName = "Banana", 
+      Email = "b@b.com",
+    };
 
     public static List<User> GetUsers() => new List<User>{user1, user2};
+    public static List<UserDto> GetDtoUsers() => new List<UserDto>{dtoUser1, dtoUser1};
     public static User ValidUser() => user1;
     public static User InValidUser() => user3;
     public static UserDto DtoUser() => dtoUser1;

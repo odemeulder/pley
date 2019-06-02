@@ -101,6 +101,7 @@ namespace Pley.Services {
       if (!String.IsNullOrWhiteSpace(password)) {
         (existingUser.PasswordHash, existingUser.PasswordSalt) = CreatePasswordHash(password);
       }
+      existingUser.Type = user.Type;
       existingUser.ModifiedOn = System.DateTime.Now;
       _dbContext.Users.Update(existingUser);
       _dbContext.SaveChanges();

@@ -3,16 +3,27 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Alert from '../common/Alert'
 import TextInput from '../common/textInput'
+import Select from '../common/select'
 import { userActions } from '../../store/Users'
 import { alertActions } from '../../store/Alerts'
+import { UserType } from '../../helpers/userTypes'
+import { Link } from 'react-router-dom'
 
 class UserForm extends React.Component {
   
   constructor(props) {
     super(props)
 
+    const emptyUser = { 
+      id: 0, 
+      firstName: '', 
+      lastName: '', 
+      email: '', 
+      type: UserType.User
+    }
+
     this.state = {
-      user: { ...this.props.user },
+      user: { ...emptyUser, ...this.props.user },
       errors: {}
     }
 
@@ -76,6 +87,11 @@ class UserForm extends React.Component {
   
   render() {
     if (!this.props.user) return null
+    const options = [
+      { value: UserType.User, label: UserType.Display(UserType.User) },
+      { value: UserType.Owner, label: UserType.Display(UserType.Owner) },
+      { value: UserType.Admin, label: UserType.Display(UserType.Admin) },
+    ]
     return (
       <div>
         <h1>Update User</h1>
@@ -96,21 +112,32 @@ class UserForm extends React.Component {
             value={this.state.user.lastName}
             onChange={this.handleChange}
             placeholder="name"
-            error={this.state.errors.lastName}  />
+            error={this.state.errors.lastName}  
+          />
+          <Select 
+            label="User Type"
+            name="type"
+            value={this.state.user.type}
+            onChange={this.handleChange}
+            options={options}
+            error={this.state.errors.type}
+          />
           <input 
             type="submit" 
             value="Update User" 
             className="btn btn-success"
           />
-          <br />
-          <br />
+        </form>
+        <br ></br>
+        <h2>Danger zone</h2>
           <input
             type="button"
             value="Delete User"
             className="btn btn-danger"
             onClick={this.handleDelete}
           />
-        </form>
+          <br /><br />
+          <Link className="btn btn-info btn-sm" to="/user-admin">Back to user admin</Link>
       </div>
     )
   }

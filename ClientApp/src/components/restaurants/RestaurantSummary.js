@@ -1,12 +1,21 @@
 import React from 'react'
 import StarRatingComponent from 'react-star-rating-component'
+import { Badge } from 'reactstrap'
 
 class RestaurantSummary extends React.Component {
   render() {
     if (!this.props.restaurant) return null
+    const badgeStyle = {
+      fontSize: '50%',
+      marginLeft: '4px',
+    }
     return (
       <div>
-        <h4>{this.props.restaurant.restaurantName}</h4>
+        <h4>
+          {this.props.restaurant.restaurantName}
+          { this.props.restaurant.isTopRated && <Badge style={badgeStyle} color="success">Top Rated</Badge>}
+          { this.props.restaurant.isBottomRated && <Badge style={badgeStyle} color="danger">Not too hot</Badge>}
+        </h4>
         <StarRatingComponent
             name='rating' 
             value={this.props.restaurant.averageRating} 

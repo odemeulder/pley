@@ -10,152 +10,142 @@ using System;
 
 namespace Pley.Services.Tests
 {
-  public class GetReviewsShould : IDisposable
+  public abstract class ReviewServiceTest
   {
-    private PleyContext _ctx;
-    private ReviewService _svc;
-    public GetReviewsShould()
+    protected PleyContext _ctx;
+    protected ReviewService _svc;
+
+    public ReviewServiceTest()
     {
-      _ctx = PleyContextFactory.Create("Pley Review Get All");
+      _ctx = PleyContextFactory.Create();
       _svc = ReviewServiceFactory.Create(_ctx);
     }
+  }
 
-    [Fact(Skip="In memory DB not working as expected")]
+  public class ReviewService_GetReviews_Should_ : ReviewServiceTest
+  {
+    [Fact]
     public void ReturnReviews()
     {
       //Given
-      _ctx.Reviews.Add(ReviewFixtures.review1);
-      _ctx.Reviews.Add(ReviewFixtures.review2);
-      _ctx.SaveChanges();
       //When
       var r = _svc.GetAll();
       //Then
       Assert.Equal(2, r.Count());
     }
-    
-    public void Dispose() {
-      _ctx.Reviews.Remove(ReviewFixtures.review1);
-      _ctx.Reviews.Remove(ReviewFixtures.review2);
-      _ctx.Entry(ReviewFixtures.review1).State = EntityState.Detached;
-      _ctx.Entry(ReviewFixtures.review2).State = EntityState.Detached;
-      _ctx.SaveChanges();
-      _ctx.Dispose();
-    }
   }
-  public class GetReviewByIdShould : IDisposable
+  public class ReviewService_GetReviewById_Should_ : ReviewServiceTest
   {
-    private PleyContext _ctx;
-    private ReviewService _svc;
-    public GetReviewByIdShould()
-    {
-      _ctx = PleyContextFactory.Create("Pley Review By Id");
-      _svc = ReviewServiceFactory.Create(_ctx);
-    }
-
-    [Fact(Skip="In memory DB not working as expected")]
+    [Fact]
     public void ReturnReview()
     {
-      // Given
-      _ctx.Reviews.Add(ReviewFixtures.review2);
-      var r = _ctx.Reviews.Add(ReviewFixtures.review1);
-      _ctx.SaveChanges();
       //When
-      var res = _svc.Get(r.Entity.Id);
+      var res = _svc.Get(1);
       //Then
-      Assert.Equal(r.Entity.Id, res.Id);
-      Assert.Equal(ReviewFixtures.review1.CustomerReview, res.CustomerReview);
-      // Clean up
-      _ctx.Reviews.Remove(ReviewFixtures.review1);
-      _ctx.Reviews.Remove(ReviewFixtures.review2);
-      _ctx.Entry(ReviewFixtures.review1).State = EntityState.Detached;
-      _ctx.Entry(ReviewFixtures.review2).State = EntityState.Detached;
-      _ctx.SaveChanges();
+      Assert.Equal(1, res.Id);
+      Assert.Equal(Fixtures.review1.CustomerReview, res.CustomerReview);
     }
 
-    [Fact(Skip="In memory DB not working as expected")]
-    public void ReturnNull()
+    [Fact]
+    public void ThrowExpception()
     {
       //When
       Action action = () => _svc.Get(0);
       //Then
       Assert.Throws<PleyNotFoundException>(action);
     }
-
-    public void Dispose() {
-      _ctx.Dispose();
-    }
   }
 
-  public static class ReviewServiceFactory
+  public class ReviewService_CreateReview_Should_ : ReviewServiceTest
   {
-    public static ReviewService Create(PleyContext context) {
-      var logger = new Mock<ILogger<ReviewService>>();
-      var restaurantSvcMock = new Mock<IRestaurantService>();
-      return new ReviewService(context, restaurantSvcMock.Object, logger.Object);
-    }
-  }
-
-  public static class PleyContextFactory
-  {
-    public static PleyContext Create(string name)
+    [Fact]
+    public void CreateReview()
     {
-    // Create a fresh service provider, and therefore a fresh 
-    // InMemory database instance.
-    var serviceProvider = new ServiceCollection()
-        .AddEntityFrameworkInMemoryDatabase()
-        .BuildServiceProvider();
-      var options = new DbContextOptionsBuilder<PleyContext>()
-                  .UseInMemoryDatabase(databaseName: name)
-                  .UseInternalServiceProvider(serviceProvider)
-                  .EnableSensitiveDataLogging()
-                  .Options;
-      return new PleyContext(options);
+      //When
+      var createdReview = _svc.Create(Fixtures.newReview);
+      //Then
+      Assert.Equal(Fixtures.newReview.CustomerReview, createdReview.CustomerReview);
+      Assert.Equal(Fixtures.newReview.OwnerReply, createdReview.OwnerReply);
+      Assert.Equal(Fixtures.newReview.VisitDate, createdReview.VisitDate);
+      Assert.Equal(Fixtures.newReview.Rating, createdReview.Rating);
+      Assert.Equal(Fixtures.newReview.Restaurant.Id, createdReview.Restaurant.Id);
+      Assert.Equal(Fixtures.newReview.Reviewer.Id, createdReview.Reviewer.Id);
+    }
+
+    [Fact]
+    public void UpdateAverageRating()
+    {
+      //Given
+      var restaurant20 = new Restaurant{ Id = 20, AverageRating = 3};
+      byte rating1 = 5;
+      byte rating2 = 3;
+      var review20 = new Review{ 
+        Id = 20, 
+        Restaurant = restaurant20, 
+        Rating = rating1, 
+        Reviewer = Fixtures.reviewer1};
+      var review21 = new Review{ 
+        Id = 21, 
+        Restaurant = restaurant20, 
+        Rating = rating2, 
+        Reviewer = Fixtures.reviewer2};
+      _ctx.Restaurants.Add(restaurant20);
+      _ctx.Reviews.Add(review20);
+      _ctx.SaveChanges();
+      var expextedAverageRating = (rating1 + rating2) / 2;
+      //When
+      var createdReview = _svc.Create(review21);
+      //Then
+
+      Assert.Equal(expextedAverageRating, _ctx.Restaurants.Find(20).AverageRating);
+    }
+
+
+    [Fact]
+    public void ThrowExpcetion()
+    {
+      // Given 
+      var invalidReview1 = new Review{
+        Id = 99,
+        Restaurant = new Restaurant{ Id = 99},
+        Reviewer = Fixtures.reviewer1
+      };
+      var invalidReview2 = new Review{
+        Id = 99,
+        Restaurant = Fixtures.restaurant1,
+        Reviewer = new User{ Id = 99}
+      };
+      //When
+      Action action1 = () => _svc.Create(invalidReview1);
+      Action action2 = () => _svc.Create(invalidReview2);
+      //Then
+      Assert.Throws<PleyNotFoundException>(action1);
+      Assert.Throws<PleyNotFoundException>(action2);
     }
   }
 
-  public static class ReviewFixtures
+  public class ReviewService_Reply_Should_ : ReviewServiceTest
   {
-    public static Restaurant restaurant1 = new Restaurant{
-      Id = 1,
-      RestaurantName = "The Dish"
-    };
-    public static Restaurant restaurant2 = new Restaurant{
-      Id = 2,
-      RestaurantName = "Al Dente"
-    };
-    public static User reviewer1 = new User{
-      Id = 1
-    };
-    public static User reviewer2 = new User{
-      Id = 2
-    };
-    public static Review review1 = new Review{
-      // Id = 1,
-      CustomerReview = "customer review 1",
-      OwnerReply = "owner reply 1",
-      Restaurant = restaurant1,
-      Reviewer = reviewer1,
-      VisitDate = new System.DateTime(2019, 5, 19),
-      Rating = 5
-    };
-    public static Review review2 = new Review{
-//      Id = 2,
-      CustomerReview = "customer review 2",
-      OwnerReply = "owner reply 2",
-      Restaurant = restaurant1,
-      Reviewer = reviewer2,
-      VisitDate = new System.DateTime(2019, 5, 18),
-      Rating = 4
-    };
-    public static Review review3 = new Review{
-//      Id = 3,
-      CustomerReview = "customer review 3",
-      OwnerReply = "owner reply 3",
-      Restaurant = restaurant2,
-      Reviewer = reviewer1,
-      VisitDate = new System.DateTime(2019, 5, 17),
-      Rating = 3
-    };
-    public static IList<Review> AllReviews => new List<Review>{review1, review2, review3};
+    [Fact]
+    public void UpdateReview()
+    {
+      //Given
+      var reply = "This is the owner's reply.";
+      int reviewId = 1;
+      //When
+      var ret = _svc.Reply(reviewId, reply);
+      //Then
+      Assert.Equal(reply, _ctx.Reviews.Find(reviewId).OwnerReply);
+    }
+
+    [Fact]
+    public void ReturnExcpetion()
+    {
+      //Given
+      Action action = () => _svc.Reply(0, "dummy");      
+      //Then
+      Assert.Throws<PleyNotFoundException>(action);
+    }
   }
+
 }

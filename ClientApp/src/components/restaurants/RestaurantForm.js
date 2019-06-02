@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import TextInput from '../common/textInput'
 import { restaurantActions } from '../../store/Restaurants'
 import Alert from '../common/Alert'
+import { Link } from 'react-router-dom'
 
 class RestaurantForm extends React.Component {
   constructor(props) {
@@ -63,7 +64,6 @@ class RestaurantForm extends React.Component {
   }
 
   render() {
-    console.log('restaurant form')
     return (
       <div>
         <Alert />
@@ -114,16 +114,23 @@ class RestaurantForm extends React.Component {
             value="Save Restaurant" 
             className="btn btn-success"
           />
-          <br />
-          <br />
-          <input 
-            type="button"
-            value="Delete Restaurant"
-            className="btn btn-danger"
-            onClick={this.handleDelete}
-          />
         </form>
-      </div>
+        
+        { this.state.restaurant.id &&
+          <span>
+            <br />
+            <h1>Danger zone</h1>
+            <input 
+              type="button"
+              value="Delete Restaurant"
+              className="btn btn-danger"
+              onClick={this.handleDelete}
+            />
+          </span>
+        }
+        <br /><br />
+        <Link className="btn btn-info btn-sm" to="/restaurant-admin">Back to restaurant admin</Link>
+     </div>
     )
   }
 }

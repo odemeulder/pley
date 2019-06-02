@@ -9,11 +9,23 @@ class RestaurantList extends React.Component {
     const listStyle = {
       columns: 2
     }
+    let restaurants = [...this.props.restaurants]
+    let maxRating = 0
+    let minRating = 5
+    restaurants.forEach(r => {
+      maxRating = Math.max(maxRating, r.averageRating)
+      minRating = Math.min(minRating, r.averageRating)
+    })
+    restaurants = restaurants.map(r => {
+      r.isTopRated = r.averageRating === maxRating
+      r.isBottomRated =  r.averageRating === minRating
+      return r
+    })
     return (
       <div>
         <h1>Restaurant List</h1>
         <ul className="list-unstyled" style={listStyle}>
-        { this.props.restaurants.map(r => 
+        { restaurants.map(r => 
             (<li key={r.id}>
               <RestaurantSummary restaurant={r} owner={r.owner} />
               <p><Link to={`/restaurant/${r.id}`}>Reviews</Link></p>
