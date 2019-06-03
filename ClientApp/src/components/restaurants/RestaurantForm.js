@@ -129,7 +129,7 @@ class RestaurantForm extends React.Component {
           </span>
         }
         <br /><br />
-        <Link className="btn btn-info btn-sm" to="/restaurant-admin">Back to restaurant admin</Link>
+        <Link className="btn btn-info btn-sm" to="/admin/restaurants">Back to restaurant admin</Link>
      </div>
     )
   }

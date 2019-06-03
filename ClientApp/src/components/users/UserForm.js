@@ -137,7 +137,7 @@ class UserForm extends React.Component {
             onClick={this.handleDelete}
           />
           <br /><br />
-          <Link className="btn btn-info btn-sm" to="/user-admin">Back to user admin</Link>
+          <Link className="btn btn-info btn-sm" to="/admin/users">Back to user admin</Link>
       </div>
     )
   }

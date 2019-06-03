@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap'
 import StarRatingComponent from 'react-star-rating-component'
+import { UserType } from '../../helpers/userTypes'
 
 class RestaurantTable extends React.Component {
     render() {
@@ -64,7 +65,10 @@ const restaurantComparer = (r1, r2) => {
 
 const mapStateToProps = state => {
   let user = state.users.currentUser
-  let restaurants = state.restaurants.restaurants.filter(r => r.owner.id === user.id)
+  let restaurants = state.restaurants.restaurants
+  if (user.type !== UserType.Admin) {  
+    restaurants = restaurants.filter(r => r.owner.id === user.id)
+  }
   restaurants = restaurants.sort(restaurantComparer)
   restaurants = restaurants.map(restaurant => 
     ({ ...restaurant, 

@@ -61,6 +61,12 @@ function register(user) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(user)
   }
-  return fetch(`api/users`, requestOptions).then(ResponseHandler)
+  return fetch(`api/users`, requestOptions)
+    .then(ResponseHandler)
+    .then(user => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+      localStorage.setItem('user', JSON.stringify(user))
+      return user
+    })
 }
 

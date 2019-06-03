@@ -1,6 +1,9 @@
 import { UserApi } from '../api/UserApi'
 import { alertActions } from './Alerts'
 import history from '../helpers/history'
+import * as Users from './Users'
+import * as Restaurants from './Restaurants'
+import * as Reviews from './Reviews'
 
 const authorizeUserRequest = 'USER_AUTH_REQUEST'
 const authorizeUserSuccess = 'USER_AUTH_SUCCESS'
@@ -11,6 +14,7 @@ const registerUserFail = 'REGISTER_FAIL'
 const userUpdateSuccess = 'USER_UPDATE_SUCCES'
 const fetchUsersSuccess = 'FETCH_USERS_SUCCESS'
 const deleteUserSuccess = 'DELETE_USER_SUCCESS'
+const logoutUser = "LOGOUT"
 
 export const userActions = {
   authorizeUser: user => ({ type: authorizeUserSuccess, user }),
@@ -22,6 +26,9 @@ export const userActions = {
       UserApi.login(email, password).then(
         user => {
           dispatch({ type: authorizeUserSuccess, user })
+          dispatch(Restaurants.restaurantActions.fetchAllRestaurants())
+          dispatch(Reviews.reviewActions.fetchAllReviews())
+          dispatch(Users.userActions.fetchAllUsers())          
           history.push('/')      
         },
         error => {
@@ -38,7 +45,7 @@ export const userActions = {
       UserApi.register(user).then(
         user => {
           dispatch({ type: registerUserSuccess, user})
-          dispatch({ type: authorizeUserSuccess, user })
+          history.push('/')
         },
         error => {
           dispatch({ type: registerUserFail, error})
@@ -53,7 +60,7 @@ export const userActions = {
       UserApi.updateUser(user).then(
         user => {
           dispatch({ type: userUpdateSuccess, user})
-          history.push('/user-admin')
+          history.push('/admin/users')
         },
         error => {
           dispatch(alertActions.alertError(error))
@@ -67,6 +74,7 @@ export const userActions = {
       UserApi.deleteUser(id).then(
         () => {
           dispatch({ type: deleteUserSuccess, id})
+          history.push('/admin/users')
         },
         error => {
           dispatch(alertActions.alertError(error))
@@ -86,6 +94,14 @@ export const userActions = {
         }
       )
     }
+  },
+  logout() {
+    return dispatch => {
+      UserApi.logout()
+      dispatch(alertActions.clearAlerts())
+      history.push('/')
+      dispatch({ type: logoutUser })  
+    }
   }
 }
 
@@ -98,6 +114,7 @@ export const userReducer = (state = initialState, action) => {
   switch(action.type) {
     case registerUserRequest:
       return {
+        ...state,
         registering: true,
       }
     case registerUserSuccess:
@@ -122,16 +139,26 @@ export const userReducer = (state = initialState, action) => {
       }
     case authorizeUserRequest:
       return {
+        ...state,
         loggedIn: true,
         currentUser: action.user
       }
     case authorizeUserSuccess:
       return {
+        ...state,
         loggedIn: true,
         currentUser: action.user
       }
     case authorizeUserFail: 
       return {
+        ...state,
+        loggedIn: false,
+        currentUser: {}
+      }
+    case logoutUser:
+      return {
+        ...state,
+        loggedIn: false,
         currentUser: {}
       }
     default:

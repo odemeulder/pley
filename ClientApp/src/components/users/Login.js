@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import TextInput from '../common/textInput'
 import Alert from '../common/Alert'
 import { userActions } from '../../store/Users'
+import { Link } from 'react-router-dom'
 
 class LoginForm extends React.Component {
   
@@ -52,9 +53,16 @@ class LoginForm extends React.Component {
           <input 
             type="submit" 
             value="Login" 
-            className="btn btn-primary"
+            className="btn btn-success"
             />
         </form>
+        <hr />
+        <h4>No login?</h4>
+        <Link to="/register"><input
+          type="button"
+          value="Register"
+          className="btn btn-info"
+        /></Link>
       </div>
     )
   }

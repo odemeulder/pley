@@ -15,6 +15,7 @@ export const restaurantActions = {
 
   fetchAllRestaurants() {
     return dispatch => {
+      dispatch(alertActions.clearAlerts())
       dispatch({ type: fetchAllRestaurantsRequest })
       RestaurantsApi.getAll().then(
         data => {
@@ -29,10 +30,11 @@ export const restaurantActions = {
   },
   createRestaurant(restaurant) {
     return dispatch => {
+      dispatch(alertActions.clearAlerts())
       RestaurantsApi.create(restaurant).then(
         data => {
           dispatch({ type: createRestaurantSuccess, restaurant: data })
-          history.push(`/restaurant-admin`)
+          history.push(`/admin/restaurants`)
         },
         error => {
           dispatch(alertActions.alertError(error))
@@ -42,10 +44,11 @@ export const restaurantActions = {
   },
   updateRestaurant(restaurant) {
     return dispatch => {
+      dispatch(alertActions.clearAlerts())
       RestaurantsApi.update(restaurant).then(
         data => {
           dispatch({ type: updateRestaurantSuccess, restaurant: data })
-          history.push(`/restaurant-admin`)
+          history.push(`/admin/restaurants`)
         },
         error => {
           dispatch(alertActions.alertError(error))
@@ -55,10 +58,11 @@ export const restaurantActions = {
   },
   deleteRestaurant(id) {
     return dispatch => {
+      dispatch(alertActions.clearAlerts())
       RestaurantsApi.delete(id).then(
         () => {
           dispatch({ type: deleteRestaurantSuccess, id })
-          history.push(`/restaurant-admin`)
+          history.push(`/admin/restaurants`)
         },
         error => {
           dispatch(alertActions.alertError(error))

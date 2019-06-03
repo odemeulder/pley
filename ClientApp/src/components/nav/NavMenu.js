@@ -1,9 +1,13 @@
-import React from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import './NavMenu.css';
+import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap'
+import { Link } from 'react-router-dom'
+import './NavMenu.css'
+import { userActions } from '../../store/Users'
 
-export default class NavMenu extends React.Component {
+class NavMenu extends React.Component {
+  
   constructor (props) {
     super(props);
 
@@ -11,12 +15,20 @@ export default class NavMenu extends React.Component {
     this.state = {
       isOpen: false
     };
+
+    this.handleLogout = this.handleLogout.bind(this)
   }
+
   toggle () {
     this.setState({
       isOpen: !this.state.isOpen
     });
   }
+
+  handleLogout() {
+    this.props.logout()
+  }
+
   render () {
     return (
       <header>
@@ -32,9 +44,16 @@ export default class NavMenu extends React.Component {
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/restaurants">Restaurants</NavLink>
                 </NavItem>
+                { this.props.isLoggedIn 
+                ?
+                <NavItem>
+                  <NavLink tag={Link} className="text-dark" to="/" onClick={this.handleLogout}>Logout</NavLink>
+                </NavItem>
+                :
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/login">Login</NavLink>
                 </NavItem>
+                }
               </ul>
             </Collapse>
           </Container>
@@ -43,3 +62,10 @@ export default class NavMenu extends React.Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  isLoggedIn: state.users && state.users.loggedIn,
+})
+export default connect(
+  mapStateToProps,
+  dispatch => bindActionCreators(userActions, dispatch)
+)(NavMenu)

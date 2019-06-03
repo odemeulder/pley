@@ -15,6 +15,7 @@ export const reviewActions = {
 
   fetchAllReviews() {
     return dispatch => {
+      dispatch(alertActions.clearAlerts())
       dispatch({ type: fetchAllReviewsRequest })
       ReviewsApi.getAll().then(
         data => {
@@ -29,31 +30,36 @@ export const reviewActions = {
   },
 
   createReview(review) {
-    return dispatch =>
-    ReviewsApi.create(review).then(
-      data => {
-        dispatch({type: createReviewSuccess, review: data})
-        history.push(`/restaurants/${review.restaurant.id || review.restaurantId}`)
-      },
-      error => {
-        dispatch({ type: createReviewFail, error } )
-        dispatch(alertActions.alertError(error))
-      }
-    )
+    return dispatch => {
+      dispatch(alertActions.clearAlerts())
+      ReviewsApi.create(review).then(
+        data => {
+          dispatch({type: createReviewSuccess, review: data})
+          history.push(`/restaurants/${review.restaurant.id || review.restaurantId}`)
+        },
+        error => {
+          dispatch({ type: createReviewFail, error } )
+          dispatch(alertActions.alertError(error))
+        }
+      )
+    }
   },
 
   replyReview(review) {
     return dispatch =>
-    ReviewsApi.reply(review).then(
-      data => {
-        dispatch({type: replyReviewSuccess, review: data})
-        history.push(`/restaurant/${review.restaurantId || review.restaurant.id}`)
-      },
-      error => {
-        dispatch({ type: replyReviewFail, error } )
-        dispatch(alertActions.alertError(error))
-      }
-    )
+    {
+      dispatch(alertActions.clearAlerts())
+      ReviewsApi.reply(review).then(
+        data => {
+          dispatch({type: replyReviewSuccess, review: data})
+          history.push(`/restaurant/${review.restaurantId || review.restaurant.id}`)
+        },
+        error => {
+          dispatch({ type: replyReviewFail, error } )
+          dispatch(alertActions.alertError(error))
+        }
+      )
+    }
   }
 }
 

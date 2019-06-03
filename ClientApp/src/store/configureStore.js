@@ -41,11 +41,12 @@ export default function configureStore (history, initialState) {
     compose(applyMiddleware(...middleware), ...enhancers)
   )
 
-  store.dispatch(Restaurants.restaurantActions.fetchAllRestaurants())
-  store.dispatch(Reviews.reviewActions.fetchAllReviews())
-  store.dispatch(Users.userActions.fetchAllUsers())
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (user) store.dispatch(Users.userActions.authorizeUser(user))
-
+  const user = JSON.parse(localStorage.getItem('user'))
+  if (user) { 
+    store.dispatch(Users.userActions.authorizeUser(user))
+    store.dispatch(Restaurants.restaurantActions.fetchAllRestaurants())
+    store.dispatch(Reviews.reviewActions.fetchAllReviews())
+    store.dispatch(Users.userActions.fetchAllUsers())
+  }
   return store
 }

@@ -7,26 +7,16 @@ import StarRatingComponent from 'react-star-rating-component'
 import { reviewActions } from '../../store/Reviews'
 import history from '../../helpers/history'
 import PleyDatePicker from '../common/datePicker'
+import { Link } from 'react-router-dom'
 
 class ReviewForm extends React.Component {
   constructor(props) {
     super(props)
 
-    const restaurantId = +props.match.params.id
+    const reviewId = +props.match.params.id
 
     this.state = {
-      review: {
-        customerReview: '',
-        rating: 0,
-        restaurant: {
-          id: restaurantId
-        },
-        visitDate: new Date(),
-        reviewer: {
-          id: props.reviewer.id
-        },
-      },
-      restaurantId,
+      review: props.review,
       errors: {}
     }
 
@@ -34,6 +24,13 @@ class ReviewForm extends React.Component {
     this.handleStarChange = this.handleStarChange.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log({nextProps})
+    if (this.props.review.id != nextProps.review.id) {
+      this.setState({review: nextProps.review});
+    }
   }
 
   handleChange(e) {
@@ -73,9 +70,11 @@ class ReviewForm extends React.Component {
   render() {
     return (
       <div>
-        <h1>Leave review</h1>
-        <RestaurantSummary restaurant={this.props.restaurant} />
-        <h3>Enter your review</h3>
+        <h1>Review Admin</h1>
+        { this.state.review && this.state.review.restaurant &&
+          <RestaurantSummary restaurant={this.state.review.restaurant} />
+        }
+        <h3>Edit review</h3>
         <form onSubmit={this.handleSubmit}>
           <StarRatingComponent
               name='rating' 
@@ -88,33 +87,59 @@ class ReviewForm extends React.Component {
           <TextArea
             name='customerReview'
             label='Your review'
-            placeholder='In a few words, tell us how you liked it.'
+            value={this.state.review.customerReview}
             onChange={this.handleChange}
             error={this.state.errors.customerReview}
+          />
+          <TextArea
+            name='ownerReply'
+            label='Owner reply'
+            value={this.state.review.ownerReply}
+            onChange={this.handleChange}
+            error={this.state.errors.ownerReply}
           />
           <PleyDatePicker
             name='visitDate'
             label='Date of visit'
-            value={this.state.review.visitDate}
+            // value={this.state.review.visitDate}
             onChange={this.handleDateChange}
             error={this.state.errors.visitDate}
           />
           <input 
             type="submit" 
-            value="Submit Review" 
+            value="Save Review" 
             className="btn btn-success"
           />
         </form>
+        <span>
+            <br />
+            <h1>Danger zone</h1>
+            <input 
+              type="button"
+              value="Delete Review"
+              className="btn btn-danger"
+              onClick={this.handleDelete}
+            />
+        </span>
+        <br /><br />
+        <Link className="btn btn-info btn-sm" to="/admin/reviews">Back to review admin</Link>
+
       </div>
     )
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const restaurantId = +ownProps.match.params.id
+  const reviewId = +ownProps.match.params.id
+  let reviewToEdit = { 
+    reviewId: '', reviewer: {}, customerReview: '', ownerReply: '', rating: 0, visitDate: ''
+  }
+  if (state.reviews && state.reviews.reviews.length > 0) {
+    reviewToEdit = state.reviews.reviews.find(r => r.id === +reviewId)
+  }
+  console.log(reviewToEdit)
   return {
-    restaurant: state.restaurants.restaurants.filter(r => r.id === restaurantId)[0],
-    reviewer: state.users.currentUser
+    review: reviewToEdit,
   }
 }
 

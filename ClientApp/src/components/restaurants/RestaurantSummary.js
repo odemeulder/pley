@@ -11,11 +11,11 @@ class RestaurantSummary extends React.Component {
     }
     return (
       <div>
-        <h4>
+        <h2>
           {this.props.restaurant.restaurantName}
           { this.props.restaurant.isTopRated && <Badge style={badgeStyle} color="success">Top Rated</Badge>}
           { this.props.restaurant.isBottomRated && <Badge style={badgeStyle} color="danger">Not too hot</Badge>}
-        </h4>
+        </h2>
         <StarRatingComponent
             name='rating' 
             value={this.props.restaurant.averageRating} 

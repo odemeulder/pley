@@ -22,23 +22,34 @@ class RestaurantDetail extends React.Component {
 
   render() {
     if (!this.props.restaurant) return null
+    const styleFlex = {
+      display: 'flex'
+    }
     return (
       <div>
         <h1>Restaurant View</h1>
         <RestaurantSummary restaurant={this.props.restaurant} />
-        <Link className="btn btn-info btn-sm" to={`/leave-review/${this.props.restaurant.id}`}>Leave Review</Link>
-        <h3>Customer Reviews</h3>
-        <p>Filter by: &nbsp;
-          <select name="filter" onChange={this.handleFilterChange}>
-            <option value="all">All ratings</option>
-            <option value="0">0 stars</option>
-            <option value="1">1 star</option>
-            <option value="2">2 stars</option>
-            <option value="3">3 stars</option>
-            <option value="4">4 stars</option>
-            <option value="5">5 stars</option>
-          </select>
-        </p>
+        <hr />
+        <h4>Customer Reviews</h4>
+        <div style={styleFlex}>
+          <div className="mt-1">
+            Filter by: &nbsp;
+          </div>
+          <div>
+            <select name="filter" onChange={this.handleFilterChange}>
+              <option value="all">All ratings</option>
+              <option value="0">0 stars</option>
+              <option value="1">1 star</option>
+              <option value="2">2 stars</option>
+              <option value="3">3 stars</option>
+              <option value="4">4 stars</option>
+              <option value="5">5 stars</option>
+            </select>
+          </div>
+          <div>
+            <Link className="btn btn-info btn-sm ml-5" to={`/leave-review/${this.props.restaurant.id}`}>Leave Review</Link>
+          </div>
+        </div>
         <ReviewList reviews={this.props.reviews} filter={this.state.filter} />
         <Link className="btn btn-info btn-sm" to="/restaurants">Back to restaurant list</Link>
       </div>
