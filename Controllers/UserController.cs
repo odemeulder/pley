@@ -52,7 +52,8 @@ namespace Pley.Controllers {
         {
             Subject = new ClaimsIdentity(new Claim[] 
             {
-                new Claim(ClaimTypes.Name, user.Id.ToString())
+                new Claim(ClaimTypes.Name, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Type.ToString())
             }),
             Expires = DateTime.UtcNow.AddDays(7),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -75,6 +76,7 @@ namespace Pley.Controllers {
     }
 
     [HttpGet]
+    [Authorize(Roles=Role.Admin)]
     public IActionResult GetUsers() {
       try {
         var users = _mapper.Map<IList<UserDto>>(_svc.GetAllUsers());
@@ -99,6 +101,7 @@ namespace Pley.Controllers {
     }
 
     [HttpPut]
+    [Authorize(Roles=Role.Admin)]
     [Route("{id?}")]
     public IActionResult Update([FromBody]UserDto dto) {
       try {
@@ -113,6 +116,7 @@ namespace Pley.Controllers {
     }
 
     [HttpDelete]
+    [Authorize(Roles=Role.Admin)]
     [Route("{id?}")]
     public IActionResult Delete([FromRoute] int id) {
       try {

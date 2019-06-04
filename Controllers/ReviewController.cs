@@ -59,6 +59,7 @@ namespace Pley.Controllers {
 
     [HttpDelete]
     [Route("{id}")]
+    [Authorize(Roles=Role.Admin)]
     public IActionResult Delete([FromRoute]int id) {
       try {
         _svc.Delete(id);
@@ -82,6 +83,7 @@ namespace Pley.Controllers {
       }
     }
     [HttpPut]
+    [Authorize(Roles=Role.Admin)]
     public IActionResult Update([FromBody]ReviewDto dto) {
       try {
         var review = _svc.Update(_mapper.Map<Review>(dto));
@@ -95,6 +97,7 @@ namespace Pley.Controllers {
 
     [HttpPut]
     [Route("{id}/reply")]
+    [Authorize(Roles=Role.Owner + "," + Role.Admin)]
     public IActionResult Reply([FromBody]ReviewDto dto) {
       try {
         var review = _svc.Reply(dto.Id, dto.OwnerReply);

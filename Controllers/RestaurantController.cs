@@ -38,11 +38,9 @@ namespace Pley.Controllers {
     public IActionResult GetAll() {
       try {
         var restaurants = _svc.GetAll();
-        foreach (var r in restaurants) {
-          _logger.LogDebug($"Debugging restaurants {r.RestaurantName}, owner {r.Owner?.Id}");
-        }
         return Ok(_mapper.Map<IList<RestaurantDto>>(restaurants));
       } catch (Exception ex) {
+        _logger.LogError("Restaurant Controller error GetAll", ex.Message);
         return BadRequest(new ErrorResponse(ex.Message));
       }
     }
@@ -56,11 +54,13 @@ namespace Pley.Controllers {
       } catch (PleyNotFoundException) {
         return NotFound(new ErrorResponse("Restaurant not found."));
       } catch (Exception ex) {
+        _logger.LogError("Restaurant Controller error Get", ex.Message);
         return BadRequest(new ErrorResponse(ex.Message));
       }
     }
 
     [HttpPost]
+    [Authorize(Roles=Role.Owner + "," + Role.Admin)]
     public IActionResult Create([FromBody]RestaurantDto dto) {
       try {
         var restaurant = _svc.Create(_mapper.Map<Restaurant>(dto));
@@ -71,6 +71,7 @@ namespace Pley.Controllers {
     }
 
     [HttpPut]
+    [Authorize(Roles=Role.Owner + "," + Role.Admin)]
     public IActionResult Update([FromBody]RestaurantDto dto) {
       try {
         var restaurant = _svc.Update(_mapper.Map<Restaurant>(dto));
@@ -82,9 +83,9 @@ namespace Pley.Controllers {
       }
     }
 
-
     [HttpDelete]
     [Route("{id}")]
+    [Authorize(Roles=Role.Owner + "," + Role.Admin)]
     public IActionResult Delete([FromRoute]int id) {
       try {
         _svc.Delete(id);

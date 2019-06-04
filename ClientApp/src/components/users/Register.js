@@ -5,6 +5,7 @@ import Alert from '../common/Alert'
 import TextInput from '../common/textInput'
 import { userActions } from '../../store/Users'
 
+
 class RegisterForm extends React.Component {
   
   constructor(props) {
@@ -115,7 +116,7 @@ class RegisterForm extends React.Component {
           <input 
             type="submit" 
             value="Register" 
-            className="btn btn-primary"
+            className="btn btn-success"
             />
         </form>
       </div>

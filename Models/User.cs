@@ -7,6 +7,12 @@ namespace Pley.Models {
     ADMIN, OWNER, USER
   }
 
+  public static class Role {
+    public const string Admin = "ADMIN";
+    public const string Owner = "OWNER";
+    public const string User = "USER";
+  }
+
   public class User : BaseEntity {
 
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

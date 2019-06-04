@@ -5,6 +5,7 @@ import * as Users from './Users'
 import * as Alerts from './Alerts'
 import * as Restaurants from './Restaurants'
 import * as Reviews from './Reviews'
+import { UserType } from '../helpers/userTypes'
 
 export default function configureStore (history, initialState) {
   const reducers = {
@@ -42,7 +43,7 @@ export default function configureStore (history, initialState) {
     store.dispatch(Users.userActions.authorizeUser(user))
     store.dispatch(Restaurants.restaurantActions.fetchAllRestaurants())
     store.dispatch(Reviews.reviewActions.fetchAllReviews())
-    store.dispatch(Users.userActions.fetchAllUsers())
+    if (user.type === UserType.Admin) store.dispatch(Users.userActions.fetchAllUsers())
   }
   return store
 }
