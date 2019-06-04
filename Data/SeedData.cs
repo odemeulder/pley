@@ -11,15 +11,18 @@ namespace Pley {
 
             if (!context.Users.Any())
             {
+                var hmac = new System.Security.Cryptography.HMACSHA512();
                 context.Users.Add(new User{ 
                     FirstName = "Olivier",
-                    LastName = "De Meulder",
-                    Email = "odemeulder@gmail.com",
+                    LastName = "Example",
+                    Email = "admin@example.com",
                     CreatedOn = DateTime.Now,
                     ModifiedOn = DateTime.Now,
-                    Type = UserType.ADMIN
+                    Type = UserType.ADMIN,
+                    PasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes("password")),
+                    PasswordSalt = hmac.Key
                   });
-
+                hmac.Dispose();
                 context.SaveChanges();
             }
         }
