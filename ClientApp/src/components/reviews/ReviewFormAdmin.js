@@ -13,8 +13,6 @@ class ReviewForm extends React.Component {
   constructor(props) {
     super(props)
 
-    const reviewId = +props.match.params.id
-
     this.state = {
       review: props.review,
       errors: {}
@@ -28,7 +26,7 @@ class ReviewForm extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     console.log({nextProps})
-    if (this.props.review.id != nextProps.review.id) {
+    if (this.props.review.id !== nextProps.review.id) {
       this.setState({review: nextProps.review});
     }
   }
@@ -63,11 +61,11 @@ class ReviewForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    this.props.createReview(this.state.review)
-    history.push(`/restaurants/${this.state.restaurantId}`)
+    this.props.updateReview(this.state.review)
   }
 
   render() {
+    if (!this.state.review) return null
     return (
       <div>
         <h1>Review Admin</h1>
@@ -101,7 +99,7 @@ class ReviewForm extends React.Component {
           <PleyDatePicker
             name='visitDate'
             label='Date of visit'
-            // value={this.state.review.visitDate}
+            value={Date.parse(this.state.review.visitDate)}
             onChange={this.handleDateChange}
             error={this.state.errors.visitDate}
           />

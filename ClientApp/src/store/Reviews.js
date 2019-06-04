@@ -7,8 +7,8 @@ const fetchAllReviewsSuccess = "FETCH_ALL_REVIEWS_SUCCESS"
 const fetchAllReviewsFail = "FETCH_ALL_REVIEWS_FAIL"
 const createReviewSuccess = "CREATE_REVIEW_SUCCESS"
 const createReviewFail = "CREATE_REVIEW_FAIL"
-const replyReviewSuccess = "REPLY_REVIEW_SUCCESS"
-const replyReviewFail = "REPLY_REVIEW_FAIL"
+const updateReviewSuccess = "REPLY_REVIEW_SUCCESS"
+const updateReviewFail = "REPLY_REVIEW_FAIL"
 
 // action creators
 export const reviewActions = {
@@ -51,11 +51,28 @@ export const reviewActions = {
       dispatch(alertActions.clearAlerts())
       ReviewsApi.reply(review).then(
         data => {
-          dispatch({type: replyReviewSuccess, review: data})
+          dispatch({type: updateReviewSuccess, review: data})
           history.push(`/restaurant/${review.restaurantId || review.restaurant.id}`)
         },
         error => {
-          dispatch({ type: replyReviewFail, error } )
+          dispatch({ type: updateReviewFail, error } )
+          dispatch(alertActions.alertError(error))
+        }
+      )
+    }
+  },
+
+  updateReview(review) {
+    return dispatch =>
+    {
+      dispatch(alertActions.clearAlerts())
+      ReviewsApi.reply(review).then(
+        data => {
+          dispatch({type: updateReviewSuccess, review: data})
+          history.push(`/admin/reviews/${review.restaurantId || review.restaurant.id}`)
+        },
+        error => {
+          dispatch({ type: updateReviewFail, error } )
           dispatch(alertActions.alertError(error))
         }
       )
@@ -94,7 +111,7 @@ export const reviewsReducer = (state = initialState, action) => {
       }
     case createReviewFail:
       return state
-    case replyReviewSuccess:
+    case updateReviewSuccess:
       const reviews = state.reviews.map(r => {
         if (r.id !== action.review.id) return r
         return {
@@ -107,7 +124,7 @@ export const reviewsReducer = (state = initialState, action) => {
         reviewsLoading: false,
         reviews
       }
-    case replyReviewFail:
+    case updateReviewFail:
         return state
     default: 
       return state

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './common/theme.css'
 import { Link } from 'react-router-dom'
 import { UserType } from '../helpers/userTypes'
-
+import RestaurantList from './restaurants/RestaurantList'
 
 const Home = props => {
   const isAdmin = props.isLoggedIn && props.userRole === UserType.Admin
@@ -31,6 +31,7 @@ const Home = props => {
       </div>
     </div>
     }
+    { props.isLoggedIn && <RestaurantList /> }
   </div>
 )}
 

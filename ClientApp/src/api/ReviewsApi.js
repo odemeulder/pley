@@ -24,5 +24,13 @@ export const ReviewsApi = {
       body: JSON.stringify(review)
     }
     return fetch(`api/reviews/${review.id}/reply`, options).then(ResponseHandler)
+  },
+  update: (review) => {
+    const options = {
+      method: 'PUT',
+      headers: { ...GetAuthToken(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(review)
+    }
+    return fetch(`api/reviews/${review.id}/update`, options).then(ResponseHandler)
   }
 }
