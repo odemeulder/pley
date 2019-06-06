@@ -9,6 +9,7 @@ const createReviewSuccess = "CREATE_REVIEW_SUCCESS"
 const createReviewFail = "CREATE_REVIEW_FAIL"
 const updateReviewSuccess = "REPLY_REVIEW_SUCCESS"
 const updateReviewFail = "REPLY_REVIEW_FAIL"
+const updateRestaurantSuccess = "UPDATE_RESTAURANT_SUCCESS"
 
 // action creators
 export const reviewActions = {
@@ -35,6 +36,7 @@ export const reviewActions = {
       ReviewsApi.create(review).then(
         data => {
           dispatch({type: createReviewSuccess, review: data})
+          dispatch({type: updateRestaurantSuccess, restaurant: data.restaurant})
           history.push(`/restaurants/${review.restaurant.id || review.restaurantId}`)
         },
         error => {

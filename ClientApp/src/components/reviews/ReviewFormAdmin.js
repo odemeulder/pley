@@ -25,7 +25,6 @@ class ReviewForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log({nextProps})
     if (this.props.review.id !== nextProps.review.id) {
       this.setState({review: nextProps.review});
     }
@@ -135,7 +134,6 @@ const mapStateToProps = (state, ownProps) => {
   if (state.reviews && state.reviews.reviews.length > 0) {
     reviewToEdit = state.reviews.reviews.find(r => r.id === +reviewId)
   }
-  console.log(reviewToEdit)
   return {
     review: reviewToEdit,
   }
