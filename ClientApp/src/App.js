@@ -8,6 +8,7 @@ import RestaurantList from './components/restaurants/RestaurantList'
 import RestaurantDetail from './components/restaurants/RestaurantDetail'
 import RestaurantTable from './components/restaurants/RestaurantAdmin'
 import RestaurantForm from './components/restaurants/RestaurantForm'
+import Restaurants from './components/restaurants/Restaurants'
 import ReviewForm from './components/reviews/ReviewForm'
 import ReviewFormAdmin from './components/reviews/ReviewFormAdmin'
 import ReplyForm from './components/reviews/ReplyForm'
@@ -39,6 +40,9 @@ export default () => (
     <Route 
       path='/restaurants' 
       component={Authorize(RestaurantList, allLoggedInUsers)} />
+    <Route 
+      path='/restaurants2' 
+      component={Authorize(Restaurants, allLoggedInUsers)} />
     <Route 
       path='/restaurant-form/:id?' 
       component={Authorize(RestaurantForm, [ UserType.Admin, UserType.Owner ])} />
