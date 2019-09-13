@@ -18,6 +18,7 @@ using AutoMapper;
 using Pley;
 using Pley.Models;
 using Pley.Services;
+using StatsdClient;
 
 namespace Pley
 {
@@ -103,6 +104,8 @@ namespace Pley
             IHostingEnvironment env, 
             PleyContext context)
         {
+            ConfigureMetrics();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -136,6 +139,15 @@ namespace Pley
                 }
             });
             DbInitializer.Initialize(context);
+        }
+
+        private void ConfigureMetrics() {
+            var metricsConfig = new StatsdConfig
+            {
+                StatsdServerName = "127.0.0.1", // If you're running the Agent locally, use this address
+                Prefix = "ODM" // Optional; by default no prefix will be prepended
+            };
+            StatsdClient.DogStatsd.Configure(metricsConfig);
         }
     }
 }

@@ -14,6 +14,8 @@
   <ItemGroup>
     <PackageReference Include="automapper" Version="8.1.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.0" />
+    <PackageReference Include="Datadog.Trace.ClrProfiler.Managed" Version="1.7.0" />
+    <PackageReference Include="DogStatsD-CSharp-Client" Version="3.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="moq" Version="4.10.1" />
