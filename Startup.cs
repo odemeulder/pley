@@ -15,10 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using AutoMapper;
-using Pley;
 using Pley.Models;
 using Pley.Services;
-using StatsdClient;
+using Honeycomb.AspNetCore.Middleware;
 
 namespace Pley
 {
@@ -37,6 +36,8 @@ namespace Pley
             // Configuration
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
+
+            services.AddHoneycomb(Configuration);
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -104,8 +105,6 @@ namespace Pley
             IHostingEnvironment env, 
             PleyContext context)
         {
-            ConfigureMetrics();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -120,7 +119,7 @@ namespace Pley
 //            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            app.UseHoneycomb();
             app.UseAuthentication();
             app.UseMvc(routes =>
             {
@@ -139,15 +138,6 @@ namespace Pley
                 }
             });
             DbInitializer.Initialize(context);
-        }
-
-        private void ConfigureMetrics() {
-            var metricsConfig = new StatsdConfig
-            {
-                StatsdServerName = "127.0.0.1", // If you're running the Agent locally, use this address
-                Prefix = "ODM" // Optional; by default no prefix will be prepended
-            };
-            StatsdClient.DogStatsd.Configure(metricsConfig);
         }
     }
 }

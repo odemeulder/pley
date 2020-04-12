@@ -4,7 +4,6 @@ using Pley.Models;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using StatsdClient;
 
 namespace Pley.Services 
 {
@@ -47,7 +46,6 @@ namespace Pley.Services
       _dbContext.Reviews.Add(review);
       _dbContext.SaveChanges();
       _restaurantSvc.UpdateAverageRating(review.Restaurant.Id);
-      DogStatsd.Increment("review.created");
       return review;
     }
 

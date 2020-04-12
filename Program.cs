@@ -7,7 +7,6 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Datadog.Trace;
 
 namespace Pley
 {
@@ -15,9 +14,6 @@ namespace Pley
     {
         public static void Main(string[] args)
         {
-            Tracer.Instance.Settings.AnalyticsEnabled = true;
-            Tracer.Instance.Settings.TraceEnabled = true;
-            Tracer.Instance.Settings.ServiceName = "ODM_Pley";
             CreateWebHostBuilder(args).Build().Run();
         }
 

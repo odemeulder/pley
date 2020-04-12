@@ -35,8 +35,3 @@ dotnet ef database update
 
 The database will be seeded with one user, with the login `admin@example.com` and password `password`.
 
-## DataDog
-
-I did a small POC to see how we can integrate metrics with this application.
-
-I used this client: https://github.com/DataDog/dogstatsd-csharp-client

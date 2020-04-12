@@ -1,6 +1,6 @@
 using System;
 using System.Text;
-using System.Linq;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,6 +14,7 @@ using Pley;
 using Pley.Models;
 using Pley.Dtos;
 using Pley.Services;
+using Honeycomb.AspNetCore;
 
 namespace Pley.Controllers {
     
@@ -24,24 +25,32 @@ namespace Pley.Controllers {
     private IReviewService _svc;
     private IMapper _mapper;
     private ILogger _logger;
+    private readonly IHoneycombEventManager _eventManager;
 
     public ReviewController(
       IReviewService svc,
       IMapper mapper,
-      ILogger<ReviewController> logger
+      ILogger<ReviewController> logger,
+      IHoneycombEventManager eventManager
     ) {
       _svc = svc;
       _mapper = mapper;
       _logger = logger;
+      _eventManager = eventManager;
     }
 
     [HttpGet]
     public IActionResult GetAll() {
+      var stopWatch = new Stopwatch();
+      stopWatch.Start();
       try {
         var reviews = _mapper.Map<IList<ReviewDto>>(_svc.GetAll());
         return Ok(reviews);
       } catch (Exception ex) {
         return BadRequest(new ErrorResponse(ex.Message));
+      } finally {
+        stopWatch.Stop();
+        _eventManager.AddData("api_response", stopWatch.ElapsedMilliseconds);
       }
     }
 

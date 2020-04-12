@@ -4,7 +4,6 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Pley.Models;
-using StatsdClient;
 
 namespace Pley.Services {
 
@@ -44,7 +43,6 @@ namespace Pley.Services {
               if (hash[i] != user.PasswordHash[i]) return null;
           }
       }
-      DogStatsd.Increment("user.loggedin");
       return user;
     }
 
