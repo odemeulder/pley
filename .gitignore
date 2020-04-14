@@ -4,7 +4,6 @@
 .DS_Store
 infra/.terraform/
 infra/terraform.tfstate.backup
-migrations_old/
 
 # User-specific files
 *.suo
