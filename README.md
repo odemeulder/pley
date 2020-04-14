@@ -35,3 +35,13 @@ dotnet ef database update
 
 The database will be seeded with one user, with the login `admin@example.com` and password `password`.
 
+### Migrating db changes to production.
+
+I set up an RDS database in AWS.
+
+I could not find a good way to push ef migrations to prd. I could create a script, using this command, and subsequently execute the script agains the prd database.
+
+```
+dotnet ef migrations script -o scripts/2020-04-12-a.sql
+'/Applications/Postgres.app/Contents/Versions/9.3/bin'/psql --host pley.c0hsbt7jwzl0.us-east-1.rds.amazonaws.com  -p5432 --user postgres
+```
