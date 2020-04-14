@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Web.Http;
 using System.Collections.Generic;
 using Xunit;
 using Moq;
@@ -7,8 +5,6 @@ using AutoMapper;
 using Pley.Models;
 using Pley.Services;
 using Pley.Dtos;
-using Pley;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;

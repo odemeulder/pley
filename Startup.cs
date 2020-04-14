@@ -1,19 +1,15 @@
-using System;
 using System.Text;
 using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using AutoMapper;
 using Pley.Models;
 using Pley.Services;
@@ -40,7 +36,7 @@ namespace Pley
             services.AddHoneycomb(Configuration);
 
             services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             
             // DB
             //string connection = "Server=localhost;Port=5432;Database=pley";
@@ -102,9 +98,10 @@ namespace Pley
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, 
-            IHostingEnvironment env, 
+            IWebHostEnvironment env, 
             PleyContext context)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -116,16 +113,26 @@ namespace Pley
                 app.UseHsts();
             }
 
+            app.UseRouting();
 //            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseHoneycomb();
             app.UseAuthentication();
-            app.UseMvc(routes =>
+            app.UseAuthorization();
+            // app.UseMvc(routes =>
+            // {
+            //     routes.MapRoute(
+            //         name: "default",
+            //         template: "{controller}/{action=Index}/{id?}");
+            // });
+
+            // Executes the endpoint that was selected by routing.
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                // Mapping of endpoints goes here:
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
 
             app.UseSpa(spa =>
