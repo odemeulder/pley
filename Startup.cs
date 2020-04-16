@@ -35,12 +35,16 @@ namespace Pley
 
             services.AddHoneycomb(Configuration);
 
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            
+            // services.AddMvc()
+            //     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllersWithViews();
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+
             // DB
-            //string connection = "Server=localhost;Port=5432;Database=pley";
-            string connection = Configuration["AppSettings:DbConn"];
+            // string connection = "Server=localhost;Port=5432;Database=pley";
+            // string connection = Configuration["AppSettings:DbConn"];
+            string connection = appSettings.DbConn;
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<PleyContext>(options => options.UseNpgsql(connection));
 
@@ -56,7 +60,6 @@ namespace Pley
             services.AddScoped<IReviewService, ReviewService>();
 
             // Authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.JwtSecret);
             services.AddAuthentication(x =>
             {
@@ -120,19 +123,13 @@ namespace Pley
             app.UseHoneycomb();
             app.UseAuthentication();
             app.UseAuthorization();
-            // app.UseMvc(routes =>
-            // {
-            //     routes.MapRoute(
-            //         name: "default",
-            //         template: "{controller}/{action=Index}/{id?}");
-            // });
 
             // Executes the endpoint that was selected by routing.
             app.UseEndpoints(endpoints =>
             {
-                // Mapping of endpoints goes here:
-                endpoints.MapControllers();
-                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
             });
 
             app.UseSpa(spa =>

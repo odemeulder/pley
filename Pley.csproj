@@ -8,8 +8,8 @@
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <UserSecretsId>dc5b0af0-8faf-4ff0-884e-ca2471480738</UserSecretsId>
-  </PropertyGroup>
+    <!-- <UserSecretsId>dc5b0af0-8faf-4ff0-884e-ca2471480738</UserSecretsId> -->
+  </PropertyGroup>  
 
   <ItemGroup>
     <PackageReference Include="automapper" Version="8.1.0" />
