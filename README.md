@@ -79,6 +79,7 @@ scp ./bin/Release/netcoreapp3.1/linux-x64/publish/appsettings* centos@x.x.x.x:/h
 scp ./bin/Release/netcoreapp3.1/linux-x64/publish/Pley centos@x.x.x.x:/home/centos
 # the front end needs to be moved separately
 # push content of ClientApp/build to ClientApp/build on server
+ssh centos@x.x.x.x 'mkdir -p ClientApp/build'
 scp ./ClientApp/build/* centos@x.x.x.x:/home/centos/ClientApp/build
 # ssh into box and start app
 ssh centos@x.x.x.x
@@ -87,6 +88,10 @@ cd /home/centos
 ./Pley
 ```
 
-### To do: set up a reverse proxy
+### To do
 
-using nginx to set up reverse proxy to map port 80 to port 5000
+- clean up - specific user for webapp and service
+- terraform issue with security group and rds database
+  - for now need to add inbound rule to SG to allow postgres access from terraform sg
+- get nginx handler to work
+- ssh?? letsencrypt??

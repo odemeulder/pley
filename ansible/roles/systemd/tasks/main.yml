@@ -1,0 +1,10 @@
+---
+- name: Copy Service File
+  copy:
+    src: pley.service
+    dest: /etc/systemd/system/
+
+- name: Start Service
+  systemd:
+    name: pley
+    state: started
