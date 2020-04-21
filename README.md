@@ -62,9 +62,16 @@ Prerequisite:
 
 ```bash
 cd infra
-~/terraform apply
+~/terraform apply -auto-approve
+
+# apply ingress rule to RDS security group
+aws ec2 authorize-security-group-ingress --group-id sg-04274a416689ad304 --protocol tcp --port 5432 --source-group $(~/terraform output -json instance_sg_id | jq -r '.')
+
+# remove security group
+aws ec2 authorize-security-group-ingress --group-id sg-04274a416689ad304 --protocol tcp --port 5432 --source-group $(~/terraform output -json instance_sg_id | jq -r '.')
+
 # when done, you can destroy infra
-~/terraform destroy
+~/terraform destroy -auto-approve
 ```
 
 ### Publish and deploy app
@@ -90,8 +97,7 @@ cd /home/centos
 
 ### To do
 
+- secrets management - ansible vault
 - clean up - specific user for webapp and service
-- terraform issue with security group and rds database
-  - for now need to add inbound rule to SG to allow postgres access from terraform sg
 - get nginx handler to work
 - ssh?? letsencrypt??

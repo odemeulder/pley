@@ -91,3 +91,7 @@ output "instance_ips" {
   value = ["${aws_instance.pley.*.public_ip}"]
 }
 
+output "instance_sg_id" {
+  value = aws_security_group.pley_sg.id
+}
+
