@@ -9,5 +9,9 @@ namespace Pley.Dtos {
         public string Email { get; set; }
         public string Password { get; set; }
         public UserType Type { get; set;}
+
+        public override string ToString() {
+            return $"UserDto: {FirstName} {LastName}";
+        }
     }
 }

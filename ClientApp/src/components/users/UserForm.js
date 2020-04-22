@@ -56,7 +56,7 @@ class UserForm extends React.Component {
     })
     const { id, firstName, lastName, email, type } = this.state.user
     if (this.isValid()) {
-      this.props.updateUser({ id, firstName, lastName, email, type })
+      this.props.updateUser({ id, firstName, lastName, email, type: +type })
     }
   }
 

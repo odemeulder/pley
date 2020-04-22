@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using AutoMapper;
 using Pley.Models;
 using Pley.Services;
-using Honeycomb.AspNetCore.Middleware;
 
 namespace Pley
 {
@@ -33,17 +32,11 @@ namespace Pley
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            services.AddHoneycomb(Configuration);
-
-            // services.AddMvc()
-            //     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddControllersWithViews();
 
             var appSettings = appSettingsSection.Get<AppSettings>();
 
             // DB
-            // string connection = "Server=localhost;Port=5432;Database=pley";
-            // string connection = Configuration["AppSettings:DbConn"];
             string connection = appSettings.DbConn;
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<PleyContext>(options => options.UseNpgsql(connection));
@@ -120,7 +113,6 @@ namespace Pley
 //            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-            app.UseHoneycomb();
             app.UseAuthentication();
             app.UseAuthorization();
 

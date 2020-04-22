@@ -111,6 +111,7 @@ namespace Pley.Controllers {
       } catch(PleyException ex) {
         return NotFound(new ErrorResponse(ex.Message));
       } catch (Exception ex) {
+        _logger.LogTrace(ex, "Issue updating");
         return BadRequest(new ErrorResponse(ex.Message));
       }
     }
