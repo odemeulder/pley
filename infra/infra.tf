@@ -88,7 +88,7 @@ resource "aws_instance" "pley" {
 }
 
 output "instance_ips" {
-  value = ["${aws_instance.pley.*.public_ip}"]
+  value = aws_instance.pley.*.public_ip
 }
 
 output "instance_sg_id" {

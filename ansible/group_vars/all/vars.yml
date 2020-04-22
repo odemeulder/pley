@@ -1,2 +1,5 @@
 ---
 web_directory: /home/centos
+
+db_conn: "{{ vault_db_conn }}"
+jwt_secret: "{{ vault_jwt_secret }}"

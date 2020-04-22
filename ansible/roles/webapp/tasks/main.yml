@@ -15,9 +15,9 @@
     owner: centos
 
 - name: Copy appsettings.Production
-  copy:
-    src: "{{ playbook_dir }}/../bin/Release/netcoreapp3.1/linux-x64/publish/appsettings.Production.json"
-    dest: /home/centos
+  template:
+    src: "appsettings.Production.json.j2"
+    dest: /home/centos/appsettings.Production.json
     owner: centos
     group: centos
 
